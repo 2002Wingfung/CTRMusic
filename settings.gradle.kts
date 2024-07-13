@@ -27,3 +27,5 @@ rootProject.name = "CTRMusic"
 include(":app")
 include(":JetpackMVVM")
 include(":Center")
+include(":Player")
+include(":Utils")

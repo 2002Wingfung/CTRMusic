@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.CTRMusic" parent="Base.Theme.CTRMusic" />
+    <style name="myNavigationDrawerStyle">
+
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

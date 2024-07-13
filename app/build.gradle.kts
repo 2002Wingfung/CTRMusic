@@ -17,6 +17,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures{
+        dataBinding=true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -46,5 +49,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.squareup.leakcanary:leakcanary-android:2.14")
+    implementation(libs.leakcanary.android)
 }

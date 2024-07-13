@@ -23,6 +23,9 @@ android {
             )
         }
     }
+    buildFeatures{
+        dataBinding=true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -46,7 +49,11 @@ dependencies {
     implementation("androidx.palette:palette-ktx:1.0.0")
     implementation("com.squareup.picasso:picasso:2.8")
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("androidx.room:room-runtime:2.4.2")
-    implementation("androidx.room:room-ktx:2.4.2")
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
     implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation(project(":Utils"))
+    implementation(project(":Player"))
+
 }

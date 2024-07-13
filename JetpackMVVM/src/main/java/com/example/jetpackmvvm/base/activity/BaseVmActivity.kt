@@ -2,7 +2,10 @@ package me.hgj.jetpackmvvm.base.activity
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
@@ -10,6 +13,7 @@ import me.hgj.jetpackmvvm.ext.getVmClazz
 import me.hgj.jetpackmvvm.ext.util.notNull
 import me.hgj.jetpackmvvm.network.manager.NetState
 import com.example.center.jetpackmvvm.network.manager.NetworkStateManager
+import com.example.jetpackmvvm.R
 
 /**
  * 作者　: hegaojian
@@ -30,12 +34,18 @@ abstract class BaseVmActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         initDataBind().notNull({
             setContentView(it)
         }, {
             setContentView(layoutId())
         })
         init(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(layoutId())) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     private fun init(savedInstanceState: Bundle?) {

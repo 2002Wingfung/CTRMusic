@@ -1,6 +1,7 @@
 package com.example.center.jetpackmvvm.base.activity
 
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.base.activity.BaseVmActivity
