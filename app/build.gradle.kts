@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+//    kotlin("kapt") version "2.0.0"
+
 }
 
 android {
@@ -39,7 +41,7 @@ android {
 }
 
 dependencies {
-
+//    kapt("groupId:artifactId:version")
     implementation(project(":Center"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

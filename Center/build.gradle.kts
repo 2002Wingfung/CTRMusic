@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+//    kotlin("kapt") version "2.0.0"
 }
 
 android {
@@ -13,7 +16,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -21,6 +23,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled=false
+            isShrinkResources=false
+
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"),"proguard-rules.pro")
         }
     }
     buildFeatures{
@@ -36,6 +44,7 @@ android {
 }
 
 dependencies {
+//    kapt("groupId:artifactId:version")
 
     implementation(project(":JetpackMVVM"))
     implementation(libs.androidx.core.ktx)
@@ -53,6 +62,8 @@ dependencies {
     implementation("androidx.room:room-ktx:2.5.1")
     implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4")
     implementation("com.google.android.material:material:1.12.0")
+//    implementation("com.github.githubwing:ByeBurger:1.2.3")
+//    implementation("com.android.support:design:25.0.0")
     implementation(project(":Utils"))
     implementation(project(":Player"))
 

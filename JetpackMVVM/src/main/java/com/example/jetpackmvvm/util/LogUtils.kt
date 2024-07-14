@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.util
+package com.example.jetpackmvvm.util
 
 import android.text.TextUtils
 import android.util.Log

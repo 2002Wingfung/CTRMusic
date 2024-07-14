@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="click"
+            type="com.example.center.MainActivity.ProxyClick" />
+        <variable
+            name="button"
+            type="String" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        tools:context=".MainActivity"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_click"
+            android:text="@{button}"
+            android:onClick="@{()->click.toMain()}"
+
+            />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/bottom_navigation_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_gravity="bottom"
+            app:layout_behavior="@string/bye_burger_bottom_behavior"
+            app:menu="@menu/bottom_menu"
+            android:visibility="visible" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

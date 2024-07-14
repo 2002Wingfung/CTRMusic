@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CTRMusic</string>
+    <string name="bye_burger_float_behavior">com.example.center.ui.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
+
+    <string name="bye_burger_bottom_behavior">com.example.center.ui.byeburgernavigationview.ByeBurgerBottomBehavior</string>
+    <string name="bye_burger_title_behavior">com.example.center.ui.byeburgernavigationview.ByeBurgerTitleBehavior</string>
+    <string name="title_discovery">发现</string>
+    <string name="title_home">首页</string>
+    <string name="title_mine">我的</string>
 </resources>

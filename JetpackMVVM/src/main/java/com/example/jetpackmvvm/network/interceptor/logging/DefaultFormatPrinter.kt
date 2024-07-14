@@ -5,7 +5,7 @@ import com.example.center.jetpackmvvm.network.interceptor.logging.LogInterceptor
 import com.example.center.jetpackmvvm.network.interceptor.logging.LogInterceptor.Companion.isXml
 import me.hgj.jetpackmvvm.util.CharacterHandler.Companion.jsonFormat
 import me.hgj.jetpackmvvm.util.CharacterHandler.Companion.xmlFormat
-import me.hgj.jetpackmvvm.util.LogUtils
+import com.example.jetpackmvvm.util.LogUtils
 import okhttp3.MediaType
 import okhttp3.Request
 import java.security.MessageDigest

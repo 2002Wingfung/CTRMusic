@@ -3,7 +3,7 @@ package com.example.center.jetpackmvvm.base.activity
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.base.activity.BaseVmActivity
+import com.example.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.ext.inflateBindingWithGeneric
 
 /**

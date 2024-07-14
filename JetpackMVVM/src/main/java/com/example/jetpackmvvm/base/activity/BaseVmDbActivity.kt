@@ -1,10 +1,10 @@
 package com.example.center.jetpackmvvm.base.activity
 
+import android.os.Bundle
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.base.activity.BaseVmActivity
+import com.example.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.ext.inflateBindingWithGeneric
 
 /**
@@ -25,5 +25,10 @@ abstract class BaseVmDbActivity<VM : BaseViewModel, DB : ViewDataBinding> : Base
     override fun initDataBind(): View? {
         mDatabind = inflateBindingWithGeneric(layoutInflater)
         return mDatabind.root
+    }
+    abstract fun DB.initDataBindingView()
+
+    override fun initView(savedInstanceState: Bundle?) {
+        mDatabind.initDataBindingView()
     }
 }
