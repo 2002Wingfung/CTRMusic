@@ -1,10 +1,9 @@
-package com.example.center.jetpackmvvm.base.activity
+package com.example.jetpackmvvm.base.activity
 
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import com.example.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.ext.inflateBindingWithGeneric
 
 /**

@@ -16,20 +16,24 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         tools:context=".MainActivity"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_click"
-            android:text="@{button}"
-            android:onClick="@{()->click.toMain()}"
 
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/btn_click"-->
+<!--            android:text="@{button}"-->
+<!--            android:onClick="@{()->click.toMain()}"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:visibility="invisible"-->
+<!--            />-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:visibility="invisible"
             />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,8 +45,12 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_gravity="bottom"
             app:layout_behavior="@string/bye_burger_bottom_behavior"
+            android:fitsSystemWindows="true"
             app:menu="@menu/bottom_menu"
             android:visibility="visible" />
+
+<!--            app:layout_anchor="@id/bottom_navigation_bar"-->
+<!--            app:layout_anchorGravity="top|right"-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

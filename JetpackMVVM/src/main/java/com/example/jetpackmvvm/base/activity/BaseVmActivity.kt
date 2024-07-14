@@ -13,6 +13,8 @@ import me.hgj.jetpackmvvm.ext.getVmClazz
 import me.hgj.jetpackmvvm.ext.util.notNull
 import me.hgj.jetpackmvvm.network.manager.NetState
 import com.example.center.jetpackmvvm.network.manager.NetworkStateManager
+import com.example.jetpackmvvm.util.LogUtils
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * 作者　: hegaojian
@@ -42,12 +44,17 @@ abstract class BaseVmActivity<VM : BaseViewModel> : AppCompatActivity() {
         })
         init(savedInstanceState)
         setBarsPadding(bottom = 0)
+
     }
+    var thisBottom=0
+    protected abstract fun setBottomBarPadding()
     private fun setBarsPadding(left:Int?=null,top:Int?=null,right:Int?=null,bottom:Int?=null){
         ViewCompat.setOnApplyWindowInsetsListener(/*findViewById(layoutId())*/
             layoutView()
         ) { v, insets ->
+
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            thisBottom=systemBars.bottom
             v.setPadding(left?:systemBars.left, top?:systemBars.top, right?:systemBars.right, bottom?:systemBars.bottom)
             insets
         }

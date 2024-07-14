@@ -76,7 +76,7 @@ public class TranslateAnimateHelper implements AnimateHelper {
   private void showBottom() {
 
     ValueAnimator va = ValueAnimator.ofFloat(mTarget.getY(), mFirstY);
-    va.setDuration(300);
+    va.setDuration(180);
     va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
       @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
         mTarget.setY((Float) valueAnimator.getAnimatedValue());
@@ -89,12 +89,8 @@ public class TranslateAnimateHelper implements AnimateHelper {
 
   private void hideBottom() {
     ValueAnimator va = ValueAnimator.ofFloat(mTarget.getY(), mFirstY + mTarget.getHeight()+mMargin);
-    va.setDuration(300);
-    va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
-        mTarget.setY((Float) valueAnimator.getAnimatedValue());
-      }
-    });
+    va.setDuration(180);
+    va.addUpdateListener(valueAnimator -> mTarget.setY((Float) valueAnimator.getAnimatedValue()));
 
     va.start();
     mCurrentState = STATE_HIDE;
