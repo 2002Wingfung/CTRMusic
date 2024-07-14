@@ -43,9 +43,6 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
 //        TODO("Not yet implemented")
     }
 
-    override fun setBottomBarPadding() {
-    }
-
     override fun layoutId(): Int {
         return R.id.main
     }
@@ -90,6 +87,8 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
         lifecycleScope.launch {
             delay(190)
             linearlayout.setPadding(0,0,0,-bottomBarHeight)
+//            LogUtils.warnInfo(linearlayout.layoutParams.width.toString()+"")
+//            LogUtils.warnInfo(linearlayout.layoutParams.height.toString()+"")
         }
     }
     private fun showBottomBar(){
