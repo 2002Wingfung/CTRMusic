@@ -5,7 +5,7 @@
     "SpellCheckingInspection"
 )
 
-package me.hgj.jetpackmvvm.util
+package com.example.jetpackmvvm.util
 
 import android.app.Activity
 import android.content.Context

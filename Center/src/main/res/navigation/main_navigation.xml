@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/home_fragment">
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.example.center.module.home.HomeFragment"
+        android:label="HomeFragment">
+<!--        <action-->
+<!--            android:id="@+id/action_home_fragment_to_mine_fragment"-->
+<!--            app:destination="@id/mine_fragment"-->
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_home_fragment_to_discovery_fragment"-->
+<!--            app:destination="@id/discovery_fragment"-->
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/mine_fragment"
+        android:name="com.example.center.module.mine.MineFragment"
+        android:label="MineFragment">
+<!--        <action-->
+<!--            android:id="@+id/action_mine_fragment_to_home_fragment"-->
+<!--            app:destination="@id/home_fragment"-->
+<!--            />-->
+
+<!--        <action-->
+<!--            android:id="@+id/action_mine_fragment_to_discovery_fragment"-->
+<!--            app:destination="@id/discovery_fragment"/>-->
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/discovery_fragment"
+        android:name="com.example.center.module.discovery.DiscoveryFragment"
+        android:label="DiscoveryFragment">
+<!--        <action-->
+<!--            android:id="@+id/action_discovery_fragment_to_mine_fragment"-->
+<!--            app:destination="@id/mine_fragment"/>-->
+<!--        <action-->
+<!--            android:id="@+id/action_discovery_fragment_to_home_fragment"-->
+<!--            app:destination="@id/home_fragment"/>-->
+    </fragment>
+<!---->
+</navigation>

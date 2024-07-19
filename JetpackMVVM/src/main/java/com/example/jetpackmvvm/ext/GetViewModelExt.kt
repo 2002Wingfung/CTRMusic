@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.ext
+package com.example.jetpackmvvm.ext
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

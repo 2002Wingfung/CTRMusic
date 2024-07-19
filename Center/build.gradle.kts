@@ -62,6 +62,8 @@ dependencies {
     implementation("androidx.room:room-ktx:2.5.1")
     implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4")
     implementation("com.google.android.material:material:1.12.0")
+    implementation("io.github.youth5201314:banner:2.2.3")
+    implementation("io.coil-kt:coil:2.6.0")
 //    implementation("com.github.githubwing:ByeBurger:1.2.3")
 //    implementation("com.android.support:design:25.0.0")
     implementation(project(":Utils"))

@@ -12,7 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.ext.getVmClazz
+import com.example.jetpackmvvm.ext.getVmClazz
 import me.hgj.jetpackmvvm.network.manager.NetState
 import com.example.center.jetpackmvvm.network.manager.NetworkStateManager
 

@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
         maven{ setUrl("https://maven.aliyun.com/repository/jcenter" )}
         maven { setUrl("https://jitpack.io" ) }
+        maven{setUrl("https://s01.oss.sonatype.org/content/groups/public")}
     }
 }
 dependencyResolutionManagement {
@@ -20,6 +21,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven{ setUrl("https://maven.aliyun.com/repository/jcenter" )}
         maven { setUrl("https://jitpack.io" ) }
+        maven{setUrl("https://s01.oss.sonatype.org/content/groups/public")}
     }
 }
 

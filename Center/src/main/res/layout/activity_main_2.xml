@@ -20,22 +20,36 @@
             android:background="@color/design_default_color_on_secondary"
             android:orientation="vertical"
             >
-            <TextView
-                android:layout_width="wrap_content"
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textSize="90sp"-->
+<!--                android:gravity="top"-->
+<!--                android:text="Hello World!" />-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textSize="90sp"-->
+<!--                android:gravity="bottom"-->
+<!--                android:text="Hello World!" />-->
+<!--            <fragment-->
+<!--                android:id="@+id/host_fragment"-->
+<!--                android:name="com.example.jetpackmvvm.navigation.NavHostFragmentHideShow"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                app:defaultNavHost="true"-->
+<!--                app:navGraph="@navigation/main_navigation" />-->
+            <androidx.viewpager2.widget.ViewPager2
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:textSize="90sp"
-                android:gravity="top"
-                android:text="Hello World!" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:textSize="90sp"
-                android:gravity="bottom"
-                android:text="Hello World!" />
+                android:id="@+id/main_viewpager"
+                />
             <include
                 android:id="@+id/title_bottom_bar"
                 layout="@layout/main_app_bar"/>

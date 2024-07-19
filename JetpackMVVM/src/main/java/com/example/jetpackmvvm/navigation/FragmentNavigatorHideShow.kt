@@ -1,4 +1,4 @@
-package com.example.center.jetpackmvvm.navigation
+package com.example.jetpackmvvm.navigation
 
 import android.content.Context
 import android.os.Bundle

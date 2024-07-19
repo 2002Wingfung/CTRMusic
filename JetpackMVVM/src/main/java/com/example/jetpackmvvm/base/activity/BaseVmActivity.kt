@@ -9,12 +9,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.ext.getVmClazz
+import com.example.jetpackmvvm.ext.getVmClazz
 import me.hgj.jetpackmvvm.ext.util.notNull
 import me.hgj.jetpackmvvm.network.manager.NetState
 import com.example.center.jetpackmvvm.network.manager.NetworkStateManager
-import com.example.jetpackmvvm.util.LogUtils
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * 作者　: hegaojian
@@ -74,7 +72,7 @@ abstract class BaseVmActivity<VM : BaseViewModel> : AppCompatActivity() {
      * 创建viewModel
      */
     private fun createViewModel(): VM {
-        return ViewModelProvider(this).get(getVmClazz(this))
+        return ViewModelProvider(this)[getVmClazz(this)]
     }
 
     /**
