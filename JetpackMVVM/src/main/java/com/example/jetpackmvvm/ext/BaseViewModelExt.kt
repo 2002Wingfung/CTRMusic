@@ -10,6 +10,7 @@ import me.hgj.jetpackmvvm.ext.util.loge
 import com.example.center.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
 import com.example.center.jetpackmvvm.network.ExceptionHandle
+import com.example.jetpackmvvm.util.LogUtils
 import me.hgj.jetpackmvvm.state.ResultState
 import me.hgj.jetpackmvvm.state.paresException
 import me.hgj.jetpackmvvm.state.paresResult
@@ -104,6 +105,7 @@ fun <T> BaseViewModel.request(
             block()
         }.onSuccess {
             resultState.paresResult(it)
+            LogUtils.warnInfo(it.getResponseMsg())
         }.onFailure {
             it.message?.loge()
             //打印错误栈信息
@@ -239,7 +241,7 @@ suspend fun <T> executeResponse(
 ) {
     coroutineScope {
         when {
-            response.isSucces() -> {
+            response.isSuccess() -> {
                 success(response.getResponseData())
             }
             else -> {

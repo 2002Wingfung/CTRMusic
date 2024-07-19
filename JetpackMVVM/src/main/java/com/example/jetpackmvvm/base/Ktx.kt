@@ -1,4 +1,4 @@
-package com.example.center.jetpackmvvm.base
+package com.example.jetpackmvvm.base
 
 import android.app.Application
 import android.content.ContentProvider

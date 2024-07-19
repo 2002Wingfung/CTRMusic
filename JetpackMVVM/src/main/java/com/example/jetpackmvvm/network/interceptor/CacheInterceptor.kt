@@ -1,6 +1,6 @@
 package com.example.jetpackmvvm.network.interceptor
 
-import com.example.center.jetpackmvvm.base.appContext
+import com.example.jetpackmvvm.base.appContext
 import com.example.jetpackmvvm.network.NetworkUtil
 import okhttp3.CacheControl
 import okhttp3.Interceptor

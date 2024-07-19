@@ -2,7 +2,7 @@ package me.hgj.jetpackmvvm.ext.download
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import com.example.center.jetpackmvvm.base.appContext
+import com.example.jetpackmvvm.base.appContext
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.RandomAccessFile

@@ -59,5 +59,6 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0")
     api("androidx.lifecycle:lifecycle-common-java8:2.2.0")
     api("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    api ("com.github.franmontiel:PersistentCookieJar:v1.0.1")
 
 }

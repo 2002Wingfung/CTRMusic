@@ -3,7 +3,7 @@ package me.hgj.jetpackmvvm.ext.download
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import com.example.center.jetpackmvvm.base.appContext
+import com.example.jetpackmvvm.base.appContext
 
 /**
  * @author : hgj
