@@ -43,6 +43,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     private lateinit var banner:Banner<Any,BannerAdapter<Any, *>>
     override fun initView(savedInstanceState: Bundle?) {
         banner = mDatabind.banner
+        mDatabind.searchBarText="提示词"
         mDatabind.banner
             .addBannerLifecycleObserver(this)
             .setAdapter(object : BannerImageAdapter<BannerX>(bannerList) {
@@ -60,7 +61,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
                     }
                 }
             })
-            .setIndicator(CircleIndicator(context))
+            .setIndicator(CircleIndicator(context)).setBannerRound(30f)
     }
 
     override fun lazyLoadData() {

@@ -50,11 +50,11 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
     }
 
     override fun layoutId(): Int {
-        return R.id.main
+        return R.id.drawer_layout
     }
 
     override fun layoutView(): View {
-        return mDatabind.titleBottomBar.main
+        return mDatabind.ll
     }
 
     private var bottomBarHeight=0
