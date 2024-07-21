@@ -4,13 +4,20 @@ import android.text.TextUtils
 import android.util.Log
 import me.hgj.jetpackmvvm.ext.util.jetpackMvvmLog
 
+fun logW(string:String)=LogUtils.warnInfo(string)
+fun logW(tag:String,string:String)=LogUtils.warnInfo(tag,string)
+fun logE(string:String)=LogUtils.errorInfo(string)
+fun logE(tag:String,string:String)=LogUtils.errorInfo(tag,string)
 /**
  * 作者　: hegaojian
  * 时间　: 2020/3/26
  * 描述　:
  */
 object LogUtils {
-    private const val DEFAULT_TAG = "JetpackMvvm"
+    /**
+     * 唱跳rap，music~
+     */
+    private const val DEFAULT_TAG = "CTRMusic"
     fun debugInfo(tag: String?, msg: String?) {
         if (!jetpackMvvmLog || TextUtils.isEmpty(msg)) {
             return
@@ -37,6 +44,22 @@ object LogUtils {
             DEFAULT_TAG,
             msg
         )
+    }
+
+    fun errorInfo(msg: String?){
+        if (!jetpackMvvmLog || TextUtils.isEmpty(msg)) {
+            return
+        }
+    }
+    fun errorInfo(tag:String?,msg:String?){
+        if (!jetpackMvvmLog || TextUtils.isEmpty(msg)) {
+            return
+        }
+        errorInfo(
+            DEFAULT_TAG,
+            msg
+        )
+        Log.w(tag, msg!!)
     }
 
     /**

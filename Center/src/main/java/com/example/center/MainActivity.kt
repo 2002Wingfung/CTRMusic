@@ -73,7 +73,7 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
             bottomNavigationView=bottomNavigationBar
             bottomNavigationBar.setOnItemSelectedListener {
                 if(it.itemId!=currentBottomId){
-                    LogUtils.warnInfo(it.title.toString()+bottomBarHeight)
+//                    LogUtils.warnInfo(it.title.toString()+bottomBarHeight)
                     currentBottomId=it.itemId
                     when(it.itemId){
                         R.id.home->mainViewpager.setCurrentItem(0, false)
@@ -110,7 +110,6 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
             delay(190)
             bottomNavigationView.visibility=View.GONE//一样的
 //            linearlayout.setPadding(0,0,0,-bottomBarHeight)
-
         }
     }
     private fun showBottomBar(){

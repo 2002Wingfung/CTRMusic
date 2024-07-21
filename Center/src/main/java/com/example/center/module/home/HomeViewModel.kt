@@ -2,7 +2,6 @@ package com.example.center.module.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.center.bean.Banner
 import com.example.center.bean.BannerX
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
 import com.example.center.jetpackmvvm.ext.request
@@ -20,13 +19,7 @@ class HomeViewModel : BaseViewModel() {
 
 
     fun requestBannerList(){
-        request({
-            val apiResponse=apiService.getBanner()
-//            LogUtils.warnInfo(apiResponse.errorCode?.toString())
-//            LogUtils.warnInfo(apiResponse.errorMsg)
-            apiResponse
-                },_bannerList)
-
+        request({ apiService.getBanner() },_bannerList)
     }
     fun requestPlayListData(){
 
