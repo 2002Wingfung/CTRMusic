@@ -1,8 +1,9 @@
-package com.example.center.jetpackmvvm.network
+package com.example.jetpackmvvm.network
 
 import android.net.ParseException
 import android.net.http.HttpException
 import android.util.MalformedJsonException
+import com.example.center.jetpackmvvm.network.AppException
 import com.google.gson.JsonParseException
 import me.hgj.jetpackmvvm.network.Error
 import org.apache.http.conn.ConnectTimeoutException

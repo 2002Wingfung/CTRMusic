@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.center.R
@@ -29,6 +31,7 @@ import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.holder.BannerImageHolder
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.coroutines.launch
+import me.hgj.jetpackmvvm.ext.util.dp2px
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +48,20 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private val bannerList= arrayListOf<BannerX>()
+    private val bannerList= arrayListOf(BannerX())
+
+    val options =RequestOptions()/*.bitmapTransform(RoundedCorners(40))*/
+        .transform(CenterCrop(),RoundedCorners(40))
+        //.placeholder(R.drawable.bg_banner2)//图片加载出来前，显示的图片
+        .fallback( R.drawable.bg_banner5) //url为空的时候,显示的图片
+        .error(R.drawable.bg_banner7);//图片加载失败后，显示的图片
+
+//    private val placeHolderList= arrayListOf(
+//        R.drawable.bg_banner0,R.drawable.bg_banner1,R.drawable.bg_banner2,
+//        R.drawable.bg_banner3,R.drawable.bg_banner4,R.drawable.bg_banner5,
+//        R.drawable.bg_banner6,R.drawable.bg_banner7,R.drawable.bg_banner7,R.drawable.bg_banner7
+//    )
+
 
     private lateinit var banner:Banner<Any,BannerAdapter<Any, *>>
     override fun initView(savedInstanceState: Bundle?) {
@@ -63,7 +79,8 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
                     if (holder != null) {
                         Glide.with(holder.itemView)
                             .load(data!!.imageUrl)
-                            .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
+                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+                            .apply(options)
                             .into(holder.imageView)
                     }
                 }
@@ -105,7 +122,6 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun dismissLoading() {
     }
 
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -117,7 +133,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun  newInstance(param1: String, param2: String) =
             HomeFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)

@@ -2,7 +2,7 @@ package me.hgj.jetpackmvvm.state
 import androidx.lifecycle.MutableLiveData
 import com.example.center.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
-import com.example.center.jetpackmvvm.network.ExceptionHandle
+import com.example.jetpackmvvm.network.ExceptionHandle
 
 /**
  * 作者　: hegaojian
