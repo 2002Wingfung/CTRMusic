@@ -1,4 +1,4 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 //import androidx.compose.runtime.Composable
 //import androidx.compose.ui.graphics.Color

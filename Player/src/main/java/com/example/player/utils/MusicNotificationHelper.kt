@@ -1,4 +1,4 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.example.player.player.MusicPlayController
+import com.example.player.MusicPlayController
 import com.example.utils.R
 
 import com.ssk.ncmusic.core.player.event.PauseSongEvent

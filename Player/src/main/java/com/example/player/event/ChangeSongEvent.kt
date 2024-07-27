@@ -1,6 +1,6 @@
-package com.example.player.player.event
+package com.example.player.event
 
-import com.example.player.player.bean.SongBean
+import com.example.player.bean.SongBean
 
 
 /**

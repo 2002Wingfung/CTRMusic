@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.ext.lifecycle
+package com.example.jetpackmvvm.ext.lifecycle
 
 import android.os.Handler
 import androidx.lifecycle.Lifecycle

@@ -1,6 +1,13 @@
 package com.example.center.util;
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -8,7 +15,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 
 //public class ByeBurgerBehavior extends CoordinatorLayout.Behavior<View> {
 //    protected final int mTouchSlop;

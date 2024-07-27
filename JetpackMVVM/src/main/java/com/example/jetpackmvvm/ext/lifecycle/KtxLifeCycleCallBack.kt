@@ -3,7 +3,7 @@ package me.hgj.jetpackmvvm.ext.lifecycle
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import me.hgj.jetpackmvvm.ext.util.logd
+import com.example.jetpackmvvm.ext.util.logd
 
 /**
  * 作者　: hegaojian

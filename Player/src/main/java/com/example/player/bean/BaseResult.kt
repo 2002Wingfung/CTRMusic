@@ -1,4 +1,4 @@
-package com.example.player.player.bean
+package com.example.player.bean
 
 import androidx.annotation.Keep
 import java.io.Serializable

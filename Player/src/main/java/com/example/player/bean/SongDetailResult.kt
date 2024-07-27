@@ -1,4 +1,4 @@
-package com.example.player.player.bean
+package com.example.player.bean
 
 import androidx.annotation.Keep
 
@@ -15,8 +15,8 @@ data class SongBean(
     val id: Long,
     //歌曲名称
     val name: String,
-    val al: Al,
-    val ar: List<Ar>,
+    val al: com.example.player.bean.Al,
+    val ar: List<com.example.player.bean.Ar>,
 )
 
 @Keep

@@ -3,8 +3,8 @@ package com.example.center.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.center.application.NCApplication
-import com.example.player.player.MusicPlayController
+import com.example.player.MusicPlayController
+import com.example.utils.application.NCApplication
 
 /**
  * Created by ssk on 2022/4/26.

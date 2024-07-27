@@ -1,9 +1,8 @@
-package com.example.player.player
+package com.example.player
 
 import android.media.MediaPlayer
 import android.util.Log
-import com.example.player.player.bean.SongBean
-import com.ssk.ncmusic.core.player.IPlayerListener
+import com.example.player.bean.SongBean
 import com.ssk.ncmusic.core.player.event.PauseSongEvent
 import com.ssk.ncmusic.core.player.event.PlaySongEvent
 import kotlinx.coroutines.*
@@ -22,7 +21,7 @@ object NCPlayer : IPlayer,
     private var mStatus: PlayerStatus = PlayerStatus.IDLE
     var mCurSongBean: SongBean? = null
 
-    private val mMediaPlayer = MediaPlayer()
+    val mMediaPlayer = MediaPlayer()
 
     private val mTimer: Timer = Timer()
     private var mUpdateDuringTask: TimerTask? = null

@@ -1,10 +1,10 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import com.example.player.player.utils.Config.APP_DESIGN_WIDTH
+import com.example.player.utils.Config.APP_DESIGN_WIDTH
 
 
 /**

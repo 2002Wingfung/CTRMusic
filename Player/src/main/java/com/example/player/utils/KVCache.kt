@@ -1,4 +1,4 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 import android.content.Context
 import android.os.Parcelable

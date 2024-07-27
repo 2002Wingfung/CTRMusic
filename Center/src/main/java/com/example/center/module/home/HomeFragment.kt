@@ -1,17 +1,11 @@
 package com.example.center.module.home
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.support.v4.app.INotificationSideChannel.Stub
 import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
@@ -22,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.center.R
 import com.example.center.bean.BannerX
 import com.example.center.databinding.FragmentHomeBinding
-import com.example.center.jetpackmvvm.ext.parseState
+import com.example.jetpackmvvm.ext.parseState
 import com.example.jetpackmvvm.base.fragment.BaseVmDbFragment
 import com.example.jetpackmvvm.util.LogUtils
 import com.youth.banner.Banner
@@ -30,8 +24,8 @@ import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.holder.BannerImageHolder
 import com.youth.banner.indicator.CircleIndicator
+import dalvik.system.DexClassLoader
 import kotlinx.coroutines.launch
-import me.hgj.jetpackmvvm.ext.util.dp2px
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,6 +93,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     }
 
     override fun createObserver() {
+
         mViewModel.bannerList.observe(viewLifecycleOwner){ resultState ->
             //resultState为null？
             parseState(resultState,{ it ->
@@ -106,14 +101,15 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
                 banner.setDatas(it as List<BannerX>?)
             })
         }
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                //在这里面写多个launch，每个launch对应一个collect，这样就不会相互影响了
-                //缺点就是每次回调生命周期的时候都会加载一次数据
-                
+//        lifecycleScope.launch {
+//            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+//                //在这里面写多个launch，每个launch对应一个collect，这样就不会相互影响了
+//                //缺点就是每次回调生命周期的时候都会加载一次数据
+//
+//
+//            }
+//        }
 
-            }
-        }
     }
 
     override fun showLoading(message: String) {

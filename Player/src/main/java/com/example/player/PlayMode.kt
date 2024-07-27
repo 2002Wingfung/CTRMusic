@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.core.player
+package com.example.player
 
 /**
  * Created by ssk on 2022/4/23.

@@ -43,6 +43,8 @@ android {
 dependencies {
 //    kapt("groupId:artifactId:version")
     implementation(project(":Center"))
+    implementation(project(":Utils"))
+    implementation(project(":Player"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

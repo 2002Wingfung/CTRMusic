@@ -2,7 +2,7 @@ package com.example.jetpackmvvm.util
 
 import android.text.TextUtils
 import android.util.Log
-import me.hgj.jetpackmvvm.ext.util.jetpackMvvmLog
+import com.example.jetpackmvvm.ext.util.jetpackMvvmLog
 
 fun logW(string:String)=LogUtils.warnInfo(string)
 fun logW(tag:String,string:String)=LogUtils.warnInfo(tag,string)
@@ -50,16 +50,16 @@ object LogUtils {
         if (!jetpackMvvmLog || TextUtils.isEmpty(msg)) {
             return
         }
+        errorInfo(
+            DEFAULT_TAG,
+            msg
+        )
     }
     fun errorInfo(tag:String?,msg:String?){
         if (!jetpackMvvmLog || TextUtils.isEmpty(msg)) {
             return
         }
-        errorInfo(
-            DEFAULT_TAG,
-            msg
-        )
-        Log.w(tag, msg!!)
+        Log.e(tag, msg!!)
     }
 
     /**

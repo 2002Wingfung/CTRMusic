@@ -1,4 +1,4 @@
-package com.example.player.player.bean
+package com.example.player.bean
 
 import androidx.annotation.Keep
 import java.io.Serializable
@@ -12,14 +12,14 @@ import java.io.Serializable
  */
 @Keep
 data class UserPlaylistResult(
-    val playlist: List<PlaylistBean>,
-) : BaseResult()
+    val playlist: List<com.example.player.bean.PlaylistBean>,
+) : com.example.player.bean.BaseResult()
 
 @Keep
 data class PlaylistBean(
-    val tracks: List<Track>?,
-    val trackIds: List<TrackId>?,
-    val creator: Subscribers,
+    val tracks: List<com.example.player.bean.Track>?,
+    val trackIds: List<com.example.player.bean.TrackId>?,
+    val creator: com.example.player.bean.Subscribers,
     val name: String = "",
     val coverImgUrl: String = "",
     val trackCount: Int = 0,
@@ -42,8 +42,8 @@ data class Track(
     val name: String,
     val id: Long,
     val mv: Long,
-    val ar: List<Ar>,
-    val al: Al,
+    val ar: List<com.example.player.bean.Ar>,
+    val al: com.example.player.bean.Al,
 ): Serializable
 
 @Keep

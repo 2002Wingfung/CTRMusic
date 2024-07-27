@@ -1,6 +1,6 @@
-package com.example.player.player
+package com.example.player
 
-import com.example.player.player.bean.SongBean
+import com.example.player.bean.SongBean
 
 /**
  * Created by ssk on 2022/4/23.

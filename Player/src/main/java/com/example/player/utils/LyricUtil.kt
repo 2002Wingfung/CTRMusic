@@ -2,8 +2,8 @@ package com.ssk.ncmusic.utils
 
 import android.text.TextUtils
 import android.text.format.DateUtils
-import com.example.player.player.bean.LyricModel
-import com.example.player.player.bean.LyricResult
+import com.example.player.bean.LyricModel
+import com.example.player.bean.LyricResult
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -15,7 +15,7 @@ object LyricUtil {
     private val PATTERN_LINE = Pattern.compile("((\\[\\d\\d:\\d\\d\\.\\d{2,3}\\])+)(.+)")
     private val PATTERN_TIME = Pattern.compile("\\[(\\d\\d):(\\d\\d)\\.(\\d{2,3})\\]")
 
-    fun parse(lyricResult: com.example.player.player.bean.LyricResult): List<com.example.player.player.bean.LyricModel> {
+    fun parse(lyricResult: LyricResult): List<LyricModel> {
         val originLrcTexts = lyricResult.lrc?.lyric ?: ""
         val originTLyricTexts = lyricResult.tlyric?.lyric ?: ""
         val lyricModelList = parseLyrics(originLrcTexts)
@@ -35,9 +35,9 @@ object LyricUtil {
     /**
      * 从文本解析歌词
      */
-    private fun parseLyrics(lyric: String): List<com.example.player.player.bean.LyricModel> {
+    private fun parseLyrics(lyric: String): List<LyricModel> {
         var lrcText = lyric
-        val entryList = ArrayList<com.example.player.player.bean.LyricModel>()
+        val entryList = ArrayList<LyricModel>()
 
         if (!TextUtils.isEmpty(lrcText)) {
             if (lrcText.startsWith("\uFEFF")) {
@@ -57,9 +57,9 @@ object LyricUtil {
     /**
      * 从文本解析歌词
      */
-    private fun parseTlyrics(tLyric: String): List<com.example.player.player.bean.LyricModel> {
+    private fun parseTlyrics(tLyric: String): List<LyricModel> {
         var tlyric = tLyric
-        val entryList = ArrayList<com.example.player.player.bean.LyricModel>()
+        val entryList = ArrayList<LyricModel>()
 
         if (!TextUtils.isEmpty(tlyric)) {
             if (tlyric.startsWith("\uFEFF")) {
@@ -79,7 +79,7 @@ object LyricUtil {
     /**
      * 解析一行歌词
      */
-    private fun parseLyricsLine(line: String): List<com.example.player.player.bean.LyricModel>? {
+    private fun parseLyricsLine(line: String): List<LyricModel>? {
         var line = line
         if (TextUtils.isEmpty(line)) {
             return null
@@ -92,7 +92,7 @@ object LyricUtil {
         }
         val times = lineMatcher.group(1)
         val text = lineMatcher.group(3)
-        val entryList: MutableList<com.example.player.player.bean.LyricModel> = ArrayList<com.example.player.player.bean.LyricModel>()
+        val entryList: MutableList<LyricModel> = ArrayList<LyricModel>()
 
         // [00:17.65]
         val timeMatcher: Matcher = PATTERN_TIME.matcher(times)
@@ -106,7 +106,7 @@ object LyricUtil {
                 mil *= 10
             }
             val time = min * DateUtils.MINUTE_IN_MILLIS + sec * DateUtils.SECOND_IN_MILLIS + mil
-            entryList.add(com.example.player.player.bean.LyricModel(time, text))
+            entryList.add(LyricModel(time, text))
         }
         return entryList
     }
@@ -114,7 +114,7 @@ object LyricUtil {
     /**
      * 解析一行歌词
      */
-    private fun parseTLyricsLine(line: String): List<com.example.player.player.bean.LyricModel>? {
+    private fun parseTLyricsLine(line: String): List<LyricModel>? {
         var line = line
         if (TextUtils.isEmpty(line)) {
             return null
@@ -127,7 +127,7 @@ object LyricUtil {
         }
         val times = lineMatcher.group(1)
         val text = lineMatcher.group(3)
-        val entryList: MutableList<com.example.player.player.bean.LyricModel> = ArrayList<com.example.player.player.bean.LyricModel>()
+        val entryList: MutableList<LyricModel> = ArrayList<LyricModel>()
 
         // [00:17.65]
         val timeMatcher: Matcher = PATTERN_TIME.matcher(times)
@@ -141,7 +141,7 @@ object LyricUtil {
                 mil *= 10
             }
             val time = min * DateUtils.MINUTE_IN_MILLIS + sec * DateUtils.SECOND_IN_MILLIS + mil
-            entryList.add(com.example.player.player.bean.LyricModel(time, tLyric = text))
+            entryList.add(LyricModel(time, tLyric = text))
         }
         return entryList
     }

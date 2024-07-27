@@ -1,4 +1,4 @@
-package com.example.player.player
+package com.example.player
 
 /**
  * Created by ssk on 2022/4/23.

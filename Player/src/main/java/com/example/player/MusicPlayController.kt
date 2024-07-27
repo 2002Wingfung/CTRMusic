@@ -1,14 +1,12 @@
-package com.example.player.player
+package com.example.player
 
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.player.player.bean.SongBean
-import com.ssk.ncmusic.core.player.IPlayerListener
-import com.ssk.ncmusic.core.player.PlayMode
-import com.example.player.player.event.ChangeSongEvent
+import com.example.player.bean.SongBean
+import com.example.player.event.ChangeSongEvent
 import com.ssk.ncmusic.utils.StringUtil
 import com.ssk.ncmusic.utils.showToast
 import org.greenrobot.eventbus.EventBus

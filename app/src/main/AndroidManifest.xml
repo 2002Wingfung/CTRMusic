@@ -7,13 +7,17 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:name="com.example.utils.application.NCApplication"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.CTRMusic"
         tools:targetApi="31">
         <activity
+            android:hardwareAccelerated="true"
             android:name="com.example.center.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -24,8 +28,10 @@
         </activity>
         <service
             android:name="com.example.center.service.MusicPlayService"
+            android:hardwareAccelerated="true"
             android:enabled="true"
-            android:exported="false" />
+            android:process=":remote"
+            android:exported="true" />
     </application>
 
 </manifest>

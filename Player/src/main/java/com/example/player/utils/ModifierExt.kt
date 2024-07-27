@@ -1,4 +1,4 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 //import androidx.compose.foundation.clickable
 //import androidx.compose.foundation.interaction.MutableInteractionSource

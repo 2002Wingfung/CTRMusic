@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import me.hgj.jetpackmvvm.ext.util.logi
+import com.example.jetpackmvvm.ext.util.logi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File

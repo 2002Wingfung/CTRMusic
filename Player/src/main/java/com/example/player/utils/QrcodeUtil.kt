@@ -1,4 +1,4 @@
-package com.example.player.player.utils
+package com.example.player.utils
 
 import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat

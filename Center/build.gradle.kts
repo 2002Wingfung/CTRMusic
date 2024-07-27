@@ -33,6 +33,7 @@ android {
     }
     buildFeatures{
         dataBinding=true
+        aidl=true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

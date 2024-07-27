@@ -1,4 +1,4 @@
-package com.example.center.jetpackmvvm.ext
+package com.example.jetpackmvvm.ext
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 import com.example.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.base.fragment.BaseVmFragment
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.ext.util.loge
+import com.example.jetpackmvvm.ext.util.loge
 import com.example.center.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
 import com.example.jetpackmvvm.network.ExceptionHandle

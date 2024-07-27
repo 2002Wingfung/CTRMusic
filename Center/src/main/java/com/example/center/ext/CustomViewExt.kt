@@ -11,6 +11,7 @@ import com.example.center.R
 import com.example.center.module.discovery.DiscoveryFragment
 import com.example.center.module.home.HomeFragment
 import com.example.center.module.mine.MineFragment
+import com.example.jetpackmvvm.base.appContext
 import me.hgj.jetpackmvvm.ext.util.toHtml
 
 fun ViewPager2.initMain(fragmentActivity: FragmentActivity): ViewPager2 {
