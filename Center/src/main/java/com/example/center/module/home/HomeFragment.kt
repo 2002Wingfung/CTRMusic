@@ -1,13 +1,8 @@
 package com.example.center.module.home
 
 import android.os.Bundle
-import android.support.v4.app.INotificationSideChannel.Stub
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -24,8 +19,6 @@ import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.holder.BannerImageHolder
 import com.youth.banner.indicator.CircleIndicator
-import dalvik.system.DexClassLoader
-import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,15 +40,8 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     val options =RequestOptions()/*.bitmapTransform(RoundedCorners(40))*/
         .transform(CenterCrop(),RoundedCorners(40))
         //.placeholder(R.drawable.bg_banner2)//图片加载出来前，显示的图片
-        .fallback( R.drawable.bg_banner5) //url为空的时候,显示的图片
+        .fallback(R.drawable.bg_banner2) //url为空的时候,显示的图片
         .error(R.drawable.bg_banner7);//图片加载失败后，显示的图片
-
-//    private val placeHolderList= arrayListOf(
-//        R.drawable.bg_banner0,R.drawable.bg_banner1,R.drawable.bg_banner2,
-//        R.drawable.bg_banner3,R.drawable.bg_banner4,R.drawable.bg_banner5,
-//        R.drawable.bg_banner6,R.drawable.bg_banner7,R.drawable.bg_banner7,R.drawable.bg_banner7
-//    )
-
 
     private lateinit var banner:Banner<Any,BannerAdapter<Any, *>>
     override fun initView(savedInstanceState: Bundle?) {
@@ -83,6 +69,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
         mDatabind.btnDrawer.setOnClickListener{
             mActivity.findViewById<DrawerLayout>(R.id.drawer_layout).open()
         }
+
     }
 
     override fun lazyLoadData() {

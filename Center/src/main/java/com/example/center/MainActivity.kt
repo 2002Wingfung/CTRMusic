@@ -8,8 +8,18 @@ import android.os.IBinder
 import android.os.IBinder.DeathRecipient
 import android.os.RemoteException
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
+import androidx.annotation.OptIn
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.liveData
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
 import androidx.navigation.NavController
 import com.example.center.databinding.ActivityMain2Binding
 import com.example.center.databinding.MainAppBarBinding
@@ -19,8 +29,14 @@ import com.example.center.service.MusicPlayService
 import com.example.center.ui.byeburgernavigationview.ByeBurgerBehavior
 import com.example.jetpackmvvm.base.activity.BaseVmDbActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.CountDownLatch
 
 
 class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
@@ -69,6 +85,7 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
     }
 
     override fun dismissLoading() {
+
 //        TODO("Not yet implemented")
     }
 
@@ -85,9 +102,56 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
     private lateinit var linearlayout: LinearLayout
     private var currentBottomId = R.id.home
     private lateinit var navController: NavController
+    private lateinit var controllerFuture:ListenableFuture<MediaController>
+
+    private lateinit var mediaController: MediaController
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindService(Intent(this,MusicPlayService::class.java),connection,BIND_AUTO_CREATE)
+        //bindService(Intent(this,MusicPlayService::class.java),connection,BIND_AUTO_CREATE)
+    }
+
+    @OptIn(UnstableApi::class)
+    override fun onStart() {
+        super.onStart()
+        val sessionToken = SessionToken(this, ComponentName(this, MusicPlayService::class.java))
+        controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        controllerFuture.addListener(
+            {
+                // Call controllerFuture.get() to retrieve the MediaController.
+                // MediaController implements the Player interface, so it can be
+                // attached to the PlayerView UI component.
+                // playerView.setPlayer(controllerFuture.get())
+                mediaController=controllerFuture.get()
+                val mediaItem =
+                    MediaItem.Builder()
+                        .setMediaId("media-1")
+                        .setUri("https://m701.music.126.net/20240808174637/17f1dd8c03ae7272d9737ec0a14b4d95/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/18763646424/2d92/5ecc/4cae/719e99af072fc4142d024fb7530fcd91.flac".toUri())
+                        .setMediaMetadata(
+                            MediaMetadata.Builder()
+                                .setArtist("test")
+                                .setTitle("Heros")
+                                .setArtworkUri("https://p1.music.126.net/rFGNchd-J1L7dpv6n57Sxg==/7962663208587647.jpg".toUri())
+                                .build()
+                        )
+                        .build()
+                val mediaItem2 =
+                    MediaItem.Builder()
+                        .setMediaId("media-1")
+                        .setUri("http://m801.music.126.net/20240808175840/ee62bacdd5c4d37eb4aa6ee052771424/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/32071320177/3be8/2fd0/c7f3/276ef02f9e0cd6c9fd07a5c38988dbbc.flac".toUri())
+                        .setMediaMetadata(
+                            MediaMetadata.Builder()
+                                .setArtist("Aimer")
+                                .setTitle("TVアニメ「恋は雨上がりのように」EDテーマ")
+                                .setArtworkUri("https://p1.music.126.net/wAxnnUZnkN7Soqf7nhjThQ==/109951166663296887.jpg".toUri())
+                                .build()
+                        )
+                        .build()
+                mediaController.setMediaItems(mutableListOf(mediaItem,mediaItem2))
+            },
+            /*MoreExecutors.directExecutor()*/
+            ContextCompat.getMainExecutor(this)
+        )
 
     }
     override fun ActivityMain2Binding.initDataBindingView() {
@@ -106,7 +170,12 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
                     when (it.itemId) {
                         R.id.home -> mainViewpager.setCurrentItem(0, false)
                         //navController.navigateAction(R.id.action_mine_fragment_to_home_fragment)
-                        R.id.discovery -> mainViewpager.setCurrentItem(1, false)
+                        R.id.discovery -> {
+                            mainViewpager.setCurrentItem(1, false)
+
+                            mediaController.prepare()
+                            mediaController.play()
+                        }
                         //navController.navigateAction(R.id.action_home_fragment_to_discovery_fragment)
                         R.id.mine -> mainViewpager.setCurrentItem(2, false)
                         //navController.navigateAction(R.id.action_home_fragment_to_mine_fragment)
@@ -124,7 +193,10 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
     override fun createObserver() {
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        MediaController.releaseFuture(controllerFuture)
+    }
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         bottomBarHeight = mDatabind.titleBottomBar.bottomNavigationBar.height

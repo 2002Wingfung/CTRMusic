@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -43,5 +42,6 @@ dependencies {
     api("com.tencent:mmkv:1.2.13")
     api("io.coil-kt:coil-compose:2.1.0")
     api("com.google.zxing:core:3.4.0")
-
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
 }

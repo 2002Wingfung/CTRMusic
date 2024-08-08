@@ -7,7 +7,16 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
+import androidx.media3.session.MediaStyleNotificationHelper
+import androidx.media3.ui.PlayerView
 import com.example.center.IMusic
+import com.example.center.R
 import com.example.player.NCPlayer.mMediaPlayer
 import com.example.center.receiver.MusicNotificationReceiver
 import com.example.jetpackmvvm.util.logE
@@ -18,12 +27,17 @@ import java.io.IOException
 /**
  * Created by ssk on 2022/4/26.
  */
-class MusicPlayService : Service() {
+@UnstableApi
+class MusicPlayService : MediaSessionService() {
 
     private var mBinder: PlayerBinder? = null
-    class PlayerBinder : IMusic.Stub() {
+
+    private var mediaSession:MediaSession?=null
+    inner class PlayerBinder : IMusic.Stub() {
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         override fun play() {
             try {
+                //registerBroadcastReceiver()
                 mMediaPlayer.reset()
                 mMediaPlayer.setDataSource(
                     ""
@@ -76,8 +90,27 @@ class MusicPlayService : Service() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate() {
         super.onCreate()
+        logE("onCreate")
         registerBroadcastReceiver()
         mBinder= PlayerBinder()
+        val player = ExoPlayer.Builder(this).build()
+        mediaSession = MediaSession.Builder(this, player).build()
+        val notification = NotificationCompat.Builder(this, "play_control")
+            // Show controls on lock screen even when user hides sensitive content.
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setSmallIcon(androidx.media3.session.R.drawable.media3_icon_radio)
+            // Add media control buttons that invoke intents in your media service
+//            .addAction(androidx.media3.session.R.drawable.media3_icon_previous, "Previous", prevPendingIntent) // #0
+//            .addAction(androidx.media3.session.R.drawable.media3_icon_pause, "Pause", pausePendingIntent) // #1
+//            .addAction(androidx.media3.session.R.drawable.media3_icon_next, "Next", nextPendingIntent) // #2
+            // Apply the media style template.
+            .setStyle(
+                MediaStyleNotificationHelper.MediaStyle(mediaSession!!)
+                    .setShowActionsInCompactView(0,1,2 /* #1: pause button \*/))
+            .setContentTitle("Wonderful music")
+            .setContentText("My Awesome Band")
+//            .setLargeIcon(albumArtBitmap)
+            .build()
 
     }
 
@@ -95,12 +128,39 @@ class MusicPlayService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         unRegisterBroadcastReceiver()
+        mediaSession?.run {
+            player.release()
+            release()
+            mediaSession = null
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         logE("onBind")
-        return mBinder
+
+        return super.onBind(intent)
+//        return mBinder
     }
+    // The user dismissed the app from the recent tasks
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        val player = mediaSession?.player!!
+        //从最近任务中关闭Activity时，如果正在播放歌曲，则前台服务继续播放
+//        if (!player.playWhenReady
+//            || player.mediaItemCount == 0
+//            || player.playbackState == Player.STATE_ENDED) {
+//            // Stop the service if not playing, continue playing in the background
+//            // otherwise.
+//            stopSelf()
+//        }
+        //直接停止播放
+        if (player.playWhenReady) {
+            // Make sure the service is not in foreground.
+            player.pause()
+        }
+        stopSelf()
+    }
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun registerBroadcastReceiver() {
         if (mReceiver == null) {

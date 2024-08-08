@@ -1,4 +1,4 @@
-package com.example.center.jetpackmvvm.network
+package com.example.jetpackmvvm.network
 
 import okhttp3.OkHttpClient
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager

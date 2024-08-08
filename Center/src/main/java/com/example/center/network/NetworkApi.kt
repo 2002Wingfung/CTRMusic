@@ -1,7 +1,7 @@
 package com.example.center.network
 
 import com.example.jetpackmvvm.base.appContext
-import com.example.center.jetpackmvvm.network.BaseNetworkApi
+import com.example.jetpackmvvm.network.BaseNetworkApi
 import com.example.center.jetpackmvvm.network.interceptor.logging.LogInterceptor
 import com.example.jetpackmvvm.network.interceptor.CacheInterceptor
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
