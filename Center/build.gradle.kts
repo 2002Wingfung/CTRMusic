@@ -52,9 +52,9 @@ dependencies {
     implementation(libs.androidx.media3.session)
     implementation(project(":JetpackMVVM"))
     implementation(libs.androidx.core.ktx)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

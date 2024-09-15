@@ -3,6 +3,7 @@ package me.hgj.jetpackmvvm.base.fragment
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ import com.example.center.jetpackmvvm.network.manager.NetworkStateManager
 
 abstract class BaseVmFragment<VM : BaseViewModel> : Fragment() {
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     //是否第一次加载
     private var isFirst: Boolean = true

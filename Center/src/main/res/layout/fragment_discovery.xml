@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -19,6 +20,12 @@
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:text="@string/hello_discovery_fragment" />
+        <androidx.media3.ui.PlayerView
+            android:id="@+id/player_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:show_buffering="when_playing"
+            app:show_shuffle_button="true"/>
 
     </FrameLayout>
 </layout>

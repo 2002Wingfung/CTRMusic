@@ -3,10 +3,9 @@ package com.example.utils.application
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Looper
+import android.util.Log
 
-/**
- * Created by ssk on 2022/4/17.
- */
 class NCApplication : Application() {
 
     companion object {

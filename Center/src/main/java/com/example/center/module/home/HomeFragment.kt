@@ -13,7 +13,6 @@ import com.example.center.bean.BannerX
 import com.example.center.databinding.FragmentHomeBinding
 import com.example.jetpackmvvm.ext.parseState
 import com.example.jetpackmvvm.base.fragment.BaseVmDbFragment
-import com.example.jetpackmvvm.util.LogUtils
 import com.youth.banner.Banner
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.adapter.BannerImageAdapter
@@ -84,8 +83,8 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
         mViewModel.bannerList.observe(viewLifecycleOwner){ resultState ->
             //resultState为null？
             parseState(resultState,{ it ->
-                it.forEach { LogUtils.warnInfo(it.imageUrl) }
-                banner.setDatas(it as List<BannerX>?)
+//                it.forEach { LogUtils.warnInfo(it.imageUrl) }
+                banner.setDatas(it.filter { it.imageUrl?.let { true }?:false } as List<BannerX>?)
             })
         }
 //        lifecycleScope.launch {
@@ -116,7 +115,7 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun  newInstance(param1: String, param2: String) =
+        fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)

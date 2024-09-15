@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.ext.view
+package com.example.jetpackmvvm.ext.view
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.widget.ImageView
-import org.jetbrains.annotations.NotNull
 
 /**
  * 设置view显示
@@ -88,6 +87,8 @@ fun createBitmapSafely(width: Int, height: Int, config: Bitmap.Config, retryCoun
         e.printStackTrace()
         if (retryCount > 0) {
             System.gc()
+            Runtime.getRuntime().gc()
+            System.runFinalization()
             return createBitmapSafely(width, height, config, retryCount - 1)
         }
         return null

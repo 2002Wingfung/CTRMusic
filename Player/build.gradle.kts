@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 //    implementation(libs.firebase.crashlytics.buildtools)
-    implementation ("org.greenrobot:eventbus:3.3.1")
+    api ("org.greenrobot:eventbus:3.3.1")
     implementation(project(":Utils"))
     implementation("androidx.compose.runtime:runtime-android:1.6.5")
     testImplementation(libs.junit)

@@ -1,45 +1,45 @@
 package com.example.center
 
 import android.content.ComponentName
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
 import android.os.IBinder.DeathRecipient
+import android.os.Looper
 import android.os.RemoteException
+import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.liveData
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import org.greenrobot.eventbus.EventBus
 import androidx.navigation.NavController
 import com.example.center.databinding.ActivityMain2Binding
 import com.example.center.databinding.MainAppBarBinding
 import com.example.center.ext.initMain
 import com.example.center.jetpackmvvm.base.viewmodel.BaseViewModel
+import com.example.center.module.discovery.DiscoveryFragment
 import com.example.center.service.MusicPlayService
 import com.example.center.ui.byeburgernavigationview.ByeBurgerBehavior
 import com.example.jetpackmvvm.base.activity.BaseVmDbActivity
+import com.example.jetpackmvvm.util.logE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.concurrent.CountDownLatch
 
 
-class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
+class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), DiscoveryFragment.FragmentListener {
     private var myService: IMusic? = null
     private val connection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -105,7 +105,6 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
     private lateinit var controllerFuture:ListenableFuture<MediaController>
 
     private lateinit var mediaController: MediaController
-    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //bindService(Intent(this,MusicPlayService::class.java),connection,BIND_AUTO_CREATE)
@@ -123,10 +122,18 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
                 // attached to the PlayerView UI component.
                 // playerView.setPlayer(controllerFuture.get())
                 mediaController=controllerFuture.get()
+                EventBus.getDefault().postSticky(mediaController)
+//                PlayerView(this).player=mediaController
+                mediaController.addListener(object : Player.Listener {
+                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                        super.onMediaItemTransition(mediaItem, reason)
+                        logE("test"+mediaItem?.mediaMetadata?.artworkUri.toString())
+                    }
+                })
                 val mediaItem =
                     MediaItem.Builder()
                         .setMediaId("media-1")
-                        .setUri("https://m701.music.126.net/20240808174637/17f1dd8c03ae7272d9737ec0a14b4d95/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/18763646424/2d92/5ecc/4cae/719e99af072fc4142d024fb7530fcd91.flac".toUri())
+                        .setUri("https://m801.music.126.net/20240808191647/0602f860e11df2da2e22d8f3d2b93c2c/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096574807/b79d/965c/96b1/ee690087dfcd2913a5dfac14e6ffcc5c.m4a".toUri())
                         .setMediaMetadata(
                             MediaMetadata.Builder()
                                 .setArtist("test")
@@ -138,7 +145,7 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
                 val mediaItem2 =
                     MediaItem.Builder()
                         .setMediaId("media-1")
-                        .setUri("http://m801.music.126.net/20240808175840/ee62bacdd5c4d37eb4aa6ee052771424/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/32071320177/3be8/2fd0/c7f3/276ef02f9e0cd6c9fd07a5c38988dbbc.flac".toUri())
+                        .setUri("https://m801.music.126.net/20240808191756/7a66db95764bc9748892776c0cc01c48/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096427398/4f7e/6395/f2f4/b196096c1cdbb49b2a93e6d19942b1dc.m4a".toUri())
                         .setMediaMetadata(
                             MediaMetadata.Builder()
                                 .setArtist("Aimer")
@@ -173,7 +180,7 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
                         R.id.discovery -> {
                             mainViewpager.setCurrentItem(1, false)
 
-                            mediaController.prepare()
+//                            mediaController.prepare()
                             mediaController.play()
                         }
                         //navController.navigateAction(R.id.action_home_fragment_to_discovery_fragment)
@@ -220,5 +227,9 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>() {
             delay(160)
             linearlayout.setPadding(0, 0, 0, bottomBarHeight)
         }
+    }
+
+    override fun myMediaController(): MediaController {
+        return mediaController
     }
 }

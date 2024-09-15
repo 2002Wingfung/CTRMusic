@@ -40,6 +40,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     api("com.tencent:mmkv:1.2.13")
+//    implementation("org.apache.rocketmq:rocketmq-client:5.3.0")
     api("io.coil-kt:coil-compose:2.1.0")
     api("com.google.zxing:core:3.4.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")

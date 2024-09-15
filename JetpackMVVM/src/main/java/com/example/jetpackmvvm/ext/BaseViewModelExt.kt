@@ -105,7 +105,7 @@ fun <T> BaseViewModel.request(
             block()
         }.onSuccess {
             resultState.paresResult(it)
-            LogUtils.warnInfo(it.getResponseMsg())
+            //LogUtils.warnInfo(it.getResponseMsg())
         }.onFailure {
             it.message?.loge()
             //打印错误栈信息
