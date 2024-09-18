@@ -5,6 +5,7 @@ import com.example.jetpackmvvm.ext.download.FileTool.getFilePath
 import com.example.jetpackmvvm.ext.download.FileTool.openSpace
 import com.example.jetpackmvvm.ext.util.logi
 import com.example.jetpackmvvm.thread.ThreadPool
+import com.example.jetpackmvvm.util.logE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
@@ -29,12 +30,12 @@ object DownLoadManager {
             .baseUrl("https://www.baidu.com")
             .client(
                 OkHttpClient.Builder()
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS).build()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS).build()
             ).build()
     }
-    val api by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+    val api: DownLoadService by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         retrofitBuilder.create(DownLoadService::class.java)
     }
 
@@ -109,8 +110,6 @@ object DownLoadManager {
      *
      * @param threadNum
      * 线程数量
-     * @param targetFile
-     * 目标文件
      * @param sourceURL
      * 源文件URL
      */

@@ -1,6 +1,7 @@
 package com.example.jetpackmvvm.ext.download
 
 import com.example.jetpackmvvm.ext.util.logi
+import com.example.jetpackmvvm.util.logE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Callback
@@ -39,7 +40,7 @@ class MultiDownloadTask(
         try {
 //            val url = URL(loadUrl)
 //            val conn = url.openConnection()
-            val responseBody = DownLoadManager.api.multiDownloadFile("bytes=$start-$end", loadUrl).body()
+            val responseBody = DownLoadManager.api.multiDownloadFile("bytes=$start-$end", loadUrl).execute().body()
             if (responseBody == null) {
                 "responseBody is null".logi()
                 listener.onDownLoadError(
@@ -56,18 +57,17 @@ class MultiDownloadTask(
             bufferedInputStream.skip(start)
             randomAccessFile.seek(start)
 
-            var readLen = end - start
+            val sourceLen = end - start
+            var readLen = 0L
             val startIndex = start
             var lastProgress = 0
             // 如果比默认长度小，就没必要按照默认长度读取文件了
-            val bs = ByteArray((if (2048 < readLen) 2048 else readLen).toInt())
+            val bs = ByteArray((if (2048 < sourceLen) 2048 else sourceLen).toInt())
 
-            while (start < end
-                && (bufferedInputStream.read(bs).also { readLen = it.toLong() }).toLong() != -1L
-            ) {
+            while ((bufferedInputStream.read(bs).also { readLen = it.toLong() }).toLong() != -1L) {
                 start += readLen
                 randomAccessFile.write(bs, 0, readLen.toInt())
-                val progress = ((start-startIndex).toFloat() / readLen * 100).toInt() // 计算百分比
+                val progress = ((start-startIndex).toFloat() / sourceLen * 100).toInt() // 计算百分比
                 if (lastProgress != progress) {
                     lastProgress = progress
                     //记录已经下载的长度
@@ -81,7 +81,7 @@ class MultiDownloadTask(
                         indexCount
                     )
 
-                    if (start == end) {
+                    if (start >= end-1) {
                         listener.onMultiDownLoadSuccess(tag, file.path, readLen,index,indexCount)
                     }
                 }

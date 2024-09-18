@@ -1,6 +1,7 @@
 package com.example.jetpackmvvm.ext.download
 
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -25,5 +26,5 @@ interface DownLoadService {
     fun multiDownloadFile(
         @Header("RANGE") range: String,
         @Url url: String
-    ): Response<ResponseBody>
+    ): Call<ResponseBody>
 }

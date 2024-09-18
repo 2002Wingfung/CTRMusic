@@ -158,8 +158,8 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), Di
 //        )
 
         val liveData=MutableLiveData<DownloadResultState>()
-//        val url="https://upload.jianshu.io/users/upload_avatars/7687616/3ee6aef2-efc1-47a5-a868-0d1824d2a119.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp"
-        val url="https://nsub2t3.118pan.com/dl.php?ZjM4NFBmTGdjdGdEbkVHVnh6OHZWNXFLMGJ6OEN4ZGFDNlZiL2lqMVc5R2ptbnBUREIxT0FiM2Y0N2ZQaU9SQTJLUHpkVmpsc1MzWEhudkcyR2ZvMU1sZXZFZWpRTFM5clJUcml1MlhqTnU5SmxqMlVRaTdSSENTK0I5NmsvTXRYMG9LNzZWcTlkVnQwNXlOck1yZ2R6d2lCaHNJZElWRFBLTTB0SlZ5eXU2N2xTeWRPS0Exb3RKSHZlenZESWtkSmt6TFJuS3RrUWl5dDRzbm9hUVc3UngxbnBseDRyOGFrQ0JnS0tUaEl0di9rZTJ3WXRwMjhwL2FhSDVKaEttRHI1WjRKMzg5eVd2UlFpUHE4SmpDREdTaDJhSzVnQnpVNmNjQTNXbHI5QTQ3TVVTa2I4NA%3D%3D"
+        val url="https://upload.jianshu.io/users/upload_avatars/7687616/3ee6aef2-efc1-47a5-a868-0d1824d2a119.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp"
+//        val url="https://nsub2t3.118pan.com/dl.php?ZjY4M3paVi9XdWl1SHl6T1NBZzY4TDQyYnd5c0h5YmhCbUt3TDB2VjFlWFcvcTM4Q3VJVTNyZ2d3TzhONTE4bEVWTFM3TGlzRTFkR0JQK0RXNGNPc3lORk1IZE5nNVpHK203N3dsREFPck5xLy9vc1FuTG9WbGZNT1Z5ay9ORTFtL2xINjZqVkVZTVlURnJ5SVk4TUk4a201REtRZU12OFFZTGtVT0M5bGU3MmNzbmkyTWhMQjlORThjcEFQSXFseVZ0QlpvaFVRYjA2djNXSWdjck9jcVU0bFpEeTRKZWdZdUJML1U4OFFUbkhUUzNQcGVBUCtaMzZWVjZRdW9hNDduYU5JMGhOZlRwaFNDY2ZSSk9wai9RRkN1UVZUR1M0a1NOM3UyU09MZ3NXZnVpV0ZQOA%3D%3D"
 //        lifecycleScope.launch(Dispatchers.IO) {
 //            val connection = URL(url).openConnection()
 //            val sourceSize = connection.contentLengthLong
@@ -168,17 +168,18 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), Di
 //                tag = "tag2",
 //                url = url,
 //                savePath = "/storage/emulated/0/Pictures/CTRMusic",
-//                saveName = /*FileTool.getFileNameFromUrl(url)*/"2.mp3",
+//                saveName = /*FileTool.getFileNameFromUrl(url)*/"3.mp3",
 //                reDownload = true,
 //                loadListener = downLoadExt(liveData)
 //            )
 //        }
         DownLoadManager.multiDownLoad(
-            5,
-            "tag3",
+            1,
+            "tag5",
             url,
             "/storage/emulated/0/Pictures/CTRMusic",
-            "3.mp3",
+            "5.mp3",
+            true,
             loadListener = downLoadExt(liveData)
         )
         liveData.observe(this){

@@ -1,6 +1,7 @@
 package com.example.jetpackmvvm.ext.download
 
 import androidx.lifecycle.MutableLiveData
+import java.util.Arrays
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -11,6 +12,8 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
     return object : OnDownLoadListener {
         private val multiArray by lazy { BooleanArray(64) }
         private val progressArray by lazy{ IntArray(64) }
+        @Volatile
+        private var lastUpdateTime=System.currentTimeMillis()
         override fun onDownLoadPrepare(key: String) {
             //开始下载
             downloadResultState.postValue(DownloadResultState.onPending())
@@ -37,6 +40,10 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
             //所有线程执行完毕
             downloadResultState.postValue(DownloadResultState.onSuccess(path, size))
             DownLoadPool.remove(key)
+            for (i in 0 until indexCount){
+                multiArray[i]=false
+                progressArray[i]=0
+            }
         }
 
         override fun onDownLoadPause(key: String) {
@@ -62,11 +69,15 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
             indexCount: Int
         ) {
             progressArray[index] = progress
-            var sum=0
-            for (i in 0 until indexCount){
-                sum+=progressArray[i]
+            if (System.currentTimeMillis()-lastUpdateTime>1000){
+                lastUpdateTime=System.currentTimeMillis()
+                //不需要锁，不需要做到绝对精确
+                var sum=0
+                for (i in 0 until indexCount){
+                    sum+=progressArray[i]
+                }
+                downloadResultState.postValue(DownloadResultState.onProgress(hadRead, count, sum/indexCount))
             }
-            downloadResultState.postValue(DownloadResultState.onProgress(hadRead, count, sum/indexCount))
         }
     }
 }
