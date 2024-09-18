@@ -7,7 +7,7 @@ import android.text.Html
 import android.text.Spanned
 import android.text.TextUtils
 import android.view.View
-import me.hgj.jetpackmvvm.ext.view.clickNoRepeat
+import com.example.jetpackmvvm.ext.view.clickNoRepeat
 
 /**
  * 获取屏幕宽度

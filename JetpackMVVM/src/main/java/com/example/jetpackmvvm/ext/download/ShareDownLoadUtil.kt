@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.ext.download
+package com.example.jetpackmvvm.ext.download
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,19 +6,13 @@ import android.os.Build
 import com.example.jetpackmvvm.base.appContext
 
 /**
- * @author : hgj
- * @date   : 2020/7/13
+ * @author : Hong Yongfeng
+ * @date   : 2024/9/13
  */
 object ShareDownLoadUtil {
 
     private var path = Build.BRAND + "_" + Build.MODEL + "_" + "download_sp"
-    private val sp: SharedPreferences
-
-
-    init {
-        sp = appContext.getSharedPreferences(path, Context.MODE_PRIVATE)
-    }
-
+    private val sp: SharedPreferences = appContext.getSharedPreferences(path, Context.MODE_PRIVATE)
 
     fun setPath(path: String) {
         ShareDownLoadUtil.path = path
@@ -63,6 +57,4 @@ object ShareDownLoadUtil {
     fun clear() {
         sp.edit().clear().apply()
     }
-
-
 }

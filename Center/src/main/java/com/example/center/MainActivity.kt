@@ -3,26 +3,17 @@ package com.example.center
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.Handler
 import android.os.IBinder
 import android.os.IBinder.DeathRecipient
-import android.os.Looper
 import android.os.RemoteException
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import org.greenrobot.eventbus.EventBus
 import androidx.navigation.NavController
 import com.example.center.databinding.ActivityMain2Binding
 import com.example.center.databinding.MainAppBarBinding
@@ -32,11 +23,17 @@ import com.example.center.module.discovery.DiscoveryFragment
 import com.example.center.service.MusicPlayService
 import com.example.center.ui.byeburgernavigationview.ByeBurgerBehavior
 import com.example.jetpackmvvm.base.activity.BaseVmDbActivity
+import com.example.jetpackmvvm.ext.download.DownLoadManager
+import com.example.jetpackmvvm.ext.download.DownloadResultState
+import com.example.jetpackmvvm.ext.download.FileTool
+import com.example.jetpackmvvm.ext.download.downLoadExt
 import com.example.jetpackmvvm.util.logE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URL
 
 
 class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), DiscoveryFragment.FragmentListener {
@@ -115,52 +112,86 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), Di
         super.onStart()
         val sessionToken = SessionToken(this, ComponentName(this, MusicPlayService::class.java))
         controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture.addListener(
-            {
-                // Call controllerFuture.get() to retrieve the MediaController.
-                // MediaController implements the Player interface, so it can be
-                // attached to the PlayerView UI component.
-                // playerView.setPlayer(controllerFuture.get())
-                mediaController=controllerFuture.get()
-                EventBus.getDefault().postSticky(mediaController)
-//                PlayerView(this).player=mediaController
-                mediaController.addListener(object : Player.Listener {
-                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-                        super.onMediaItemTransition(mediaItem, reason)
-                        logE("test"+mediaItem?.mediaMetadata?.artworkUri.toString())
-                    }
-                })
-                val mediaItem =
-                    MediaItem.Builder()
-                        .setMediaId("media-1")
-                        .setUri("https://m801.music.126.net/20240808191647/0602f860e11df2da2e22d8f3d2b93c2c/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096574807/b79d/965c/96b1/ee690087dfcd2913a5dfac14e6ffcc5c.m4a".toUri())
-                        .setMediaMetadata(
-                            MediaMetadata.Builder()
-                                .setArtist("test")
-                                .setTitle("Heros")
-                                .setArtworkUri("https://p1.music.126.net/rFGNchd-J1L7dpv6n57Sxg==/7962663208587647.jpg".toUri())
-                                .build()
-                        )
-                        .build()
-                val mediaItem2 =
-                    MediaItem.Builder()
-                        .setMediaId("media-1")
-                        .setUri("https://m801.music.126.net/20240808191756/7a66db95764bc9748892776c0cc01c48/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096427398/4f7e/6395/f2f4/b196096c1cdbb49b2a93e6d19942b1dc.m4a".toUri())
-                        .setMediaMetadata(
-                            MediaMetadata.Builder()
-                                .setArtist("Aimer")
-                                .setTitle("TVアニメ「恋は雨上がりのように」EDテーマ")
-                                .setArtworkUri("https://p1.music.126.net/wAxnnUZnkN7Soqf7nhjThQ==/109951166663296887.jpg".toUri())
-                                .build()
-                        )
-                        .build()
-                mediaController.setMediaItems(mutableListOf(mediaItem,mediaItem2))
-            },
-            /*MoreExecutors.directExecutor()*/
-            ContextCompat.getMainExecutor(this)
-        )
+//        controllerFuture.addListener(
+//            {
+//                // Call controllerFuture.get() to retrieve the MediaController.
+//                // MediaController implements the Player interface, so it can be
+//                // attached to the PlayerView UI component.
+//                // playerView.setPlayer(controllerFuture.get())
+//                mediaController=controllerFuture.get()
+//                EventBus.getDefault().postSticky(mediaController)
+////                PlayerView(this).player=mediaController
+//                mediaController.addListener(object : Player.Listener {
+//                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+//                        super.onMediaItemTransition(mediaItem, reason)
+//                        logE("test"+mediaItem?.mediaMetadata?.artworkUri.toString())
+//                    }
+//                })
+//                val mediaItem =
+//                    MediaItem.Builder()
+//                        .setMediaId("media-1")
+//                        .setUri("https://m801.music.126.net/20240808191647/0602f860e11df2da2e22d8f3d2b93c2c/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096574807/b79d/965c/96b1/ee690087dfcd2913a5dfac14e6ffcc5c.m4a".toUri())
+//                        .setMediaMetadata(
+//                            MediaMetadata.Builder()
+//                                .setArtist("test")
+//                                .setTitle("Heros")
+//                                .setArtworkUri("https://p1.music.126.net/rFGNchd-J1L7dpv6n57Sxg==/7962663208587647.jpg".toUri())
+//                                .build()
+//                        )
+//                        .build()
+//                val mediaItem2 =
+//                    MediaItem.Builder()
+//                        .setMediaId("media-1")
+//                        .setUri("https://m801.music.126.net/20240808191756/7a66db95764bc9748892776c0cc01c48/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/14096427398/4f7e/6395/f2f4/b196096c1cdbb49b2a93e6d19942b1dc.m4a".toUri())
+//                        .setMediaMetadata(
+//                            MediaMetadata.Builder()
+//                                .setArtist("Aimer")
+//                                .setTitle("TVアニメ「恋は雨上がりのように」EDテーマ")
+//                                .setArtworkUri("https://p1.music.126.net/wAxnnUZnkN7Soqf7nhjThQ==/109951166663296887.jpg".toUri())
+//                                .build()
+//                        )
+//                        .build()
+//                mediaController.setMediaItems(mutableListOf(mediaItem,mediaItem2))
+//            },
+//            /*MoreExecutors.directExecutor()*/
+//            ContextCompat.getMainExecutor(this)
+//        )
 
+        val liveData=MutableLiveData<DownloadResultState>()
+//        val url="https://upload.jianshu.io/users/upload_avatars/7687616/3ee6aef2-efc1-47a5-a868-0d1824d2a119.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp"
+        val url="https://nsub2t3.118pan.com/dl.php?ZjM4NFBmTGdjdGdEbkVHVnh6OHZWNXFLMGJ6OEN4ZGFDNlZiL2lqMVc5R2ptbnBUREIxT0FiM2Y0N2ZQaU9SQTJLUHpkVmpsc1MzWEhudkcyR2ZvMU1sZXZFZWpRTFM5clJUcml1MlhqTnU5SmxqMlVRaTdSSENTK0I5NmsvTXRYMG9LNzZWcTlkVnQwNXlOck1yZ2R6d2lCaHNJZElWRFBLTTB0SlZ5eXU2N2xTeWRPS0Exb3RKSHZlenZESWtkSmt6TFJuS3RrUWl5dDRzbm9hUVc3UngxbnBseDRyOGFrQ0JnS0tUaEl0di9rZTJ3WXRwMjhwL2FhSDVKaEttRHI1WjRKMzg5eVd2UlFpUHE4SmpDREdTaDJhSzVnQnpVNmNjQTNXbHI5QTQ3TVVTa2I4NA%3D%3D"
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val connection = URL(url).openConnection()
+//            val sourceSize = connection.contentLengthLong
+//            logE("content-length",sourceSize.toString())
+//            DownLoadManager.downLoad(
+//                tag = "tag2",
+//                url = url,
+//                savePath = "/storage/emulated/0/Pictures/CTRMusic",
+//                saveName = /*FileTool.getFileNameFromUrl(url)*/"2.mp3",
+//                reDownload = true,
+//                loadListener = downLoadExt(liveData)
+//            )
+//        }
+        DownLoadManager.multiDownLoad(
+            5,
+            "tag3",
+            url,
+            "/storage/emulated/0/Pictures/CTRMusic",
+            "3.mp3",
+            loadListener = downLoadExt(liveData)
+        )
+        liveData.observe(this){
+            when(it){
+                is DownloadResultState.Error -> logE("livedata",it.errorMsg)
+                DownloadResultState.Pause -> logE("livedata","pause")
+                DownloadResultState.Pending -> logE("livedata","pending")
+                is DownloadResultState.Progress -> logE("livedata","progress${it.progress}")
+                is DownloadResultState.Success -> logE("livedata","success")
+            }
+        }
     }
+
     override fun ActivityMain2Binding.initDataBindingView() {
 //        Picasso.get().load("").fit().into(ImageView(this@MainActivity))
         linearlayout = ll

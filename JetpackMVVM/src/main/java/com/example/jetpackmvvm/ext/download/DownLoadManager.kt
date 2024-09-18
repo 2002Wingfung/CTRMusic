@@ -1,21 +1,28 @@
-package me.hgj.jetpackmvvm.ext.download
+package com.example.jetpackmvvm.ext.download
 
 import android.os.Looper
+import com.example.jetpackmvvm.ext.download.FileTool.getFilePath
+import com.example.jetpackmvvm.ext.download.FileTool.openSpace
+import com.example.jetpackmvvm.ext.util.logi
+import com.example.jetpackmvvm.thread.ThreadPool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import com.example.jetpackmvvm.ext.util.logi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File
+import java.net.URL
+import java.util.concurrent.SynchronousQueue
+import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
-/**
- * @author : hgj
- * @date   : 2020/7/13
- */
 
+/**
+ * @author : Hong Yongfeng
+ * @date   : 2024/9/13
+ */
 object DownLoadManager {
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
@@ -23,15 +30,136 @@ object DownLoadManager {
             .client(
                 OkHttpClient.Builder()
                     .connectTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(5, TimeUnit.SECONDS)
-                    .writeTimeout(5, TimeUnit.SECONDS).build()
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS).build()
             ).build()
+    }
+    val api by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        retrofitBuilder.create(DownLoadService::class.java)
+    }
+
+    private val blockingQueue=SynchronousQueue<Runnable>()
+
+    fun multiDownLoad(
+        threadNum: Int,
+        tag: String,
+        url: String,
+        savePath: String,
+        saveName: String,
+        reDownload: Boolean = false,
+        loadListener: OnDownLoadListener
+    ){
+        if (DownLoadPool.getCurrentSet().contains(tag)){
+            "已经在队列中".logi()
+            return
+        }
+
+        if (saveName.isEmpty()) {
+            //传入的文件名为空串
+            loadListener.onDownLoadError(tag, Throwable("save name is Empty"))
+            return
+        }
+
+        if (Looper.getMainLooper().thread != Thread.currentThread()) {
+            //判断当前线程是否为主线程
+            loadListener.onDownLoadError(tag, Throwable("current thread is not in main thread"))
+            return
+        }
+        //在主线程初始化县城出，不需要线程同步
+        val threadPool = ThreadPool(
+            corePoolSize = 2,
+            maximumPoolSize = 64,
+            keepAliveTime = 60L,
+            workQueue = blockingQueue
+        ).newThreadPool()
+        //在主线程进行加入哈希表，不用处理线程同步问题
+        DownLoadPool.add(tag)
+        threadPool.execute{
+            runCatching {
+                val connection = URL(url).openConnection()
+                connection.contentLengthLong
+            }.onSuccess {
+                val file = File("$savePath/$saveName")
+                val currentLength = if (!file.exists()) {
+                    //文件不存在，则从头开始下载
+                    0L
+                } else {
+                    //文件存在，则读取已下载的长度
+                    ShareDownLoadUtil.getLong(tag, 0)
+                }
+                if (file.exists()&&currentLength == 0L && !reDownload) {
+                    //文件已存在了，且上一次已经下载完，且没有设置重新下载
+                    loadListener.onDownLoadSuccess(tag, file.path, file.length())
+                }else{
+                    "startDownLoad current $currentLength".logi()
+                    DownLoadPool.add(tag, "$savePath/$saveName")
+                    DownLoadPool.add(tag, loadListener)
+                    loadListener.onDownLoadPrepare(key = tag)
+                    startLoadThread(threadNum,tag,it,savePath,saveName,url,threadPool,loadListener,currentLength)
+                }
+            }.onFailure {
+                loadListener.onDownLoadError(tag,it)
+            }
+        }
     }
 
     /**
+     * 如果出现不整除的情况(如:11字节,4个线程,每个线程3字节,多出1字节)，但是实际上RandomAccessFile的read()
+     * 读到文件尾会返回-1,因此不考虑余数问题
+     *
+     * @param threadNum
+     * 线程数量
+     * @param targetFile
+     * 目标文件
+     * @param sourceURL
+     * 源文件URL
+     */
+    private fun startLoadThread(
+        threadNum: Int,
+        tag: String,
+        sourceSize: Long,
+        savePath: String,
+        saveName: String,
+        sourceURL: String,
+        pool: ThreadPoolExecutor,
+        listener: OnDownLoadListener,
+        currentLength: Long = 0,
+        continueDownload: Boolean = false
+    ) {
+        try {
+            if (continueDownload){
+                //断点续传+多线程下载
+            }else{
+                val filePath = getFilePath(savePath, saveName)
+                if (filePath == null) {
+                    listener.onDownLoadError(tag, Throwable("mkdirs file [$savePath]  error"))
+                    DownLoadPool.remove(tag)
+                    return
+                }
+                val file = File(filePath)
+                // 为目标文件分配空间
+                openSpace(file, sourceSize)
+                // 分线程下载文件
+                val avgSize = sourceSize / threadNum + 1
+                for (i in 0 until threadNum) {
+                    println((avgSize * i).toString() + "------" + (avgSize * (i + 1)))
+                    pool.execute(
+                        MultiDownloadTask(
+                            avgSize * i, avgSize * (i + 1),
+                            file, sourceURL,listener,tag,i,threadNum
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            listener.onDownLoadError(tag,e)
+            e.printStackTrace()
+        }
+    }
+    /**
      *开始下载
      * @param tag String 标识
-     * @param url String  下载的url
+     * @param url String 下载的url
      * @param savePath String 保存的路径
      * @param saveName String 保存的名字
      * @param reDownload Boolean 如果文件已存在是否需要重新下载 默认不需要重新下载
@@ -54,8 +182,8 @@ object DownLoadManager {
      * 取消下载
      * @param key String 取消的标识
      */
-    fun cancel(key: String) {
-        val path = DownLoadPool.getPathFromKey(key)
+    private fun cancel(key: String) {
+        val path = DownLoadPool.getPathFromKey(key)//根据key获取文件路径
         if (path != null) {
             val file = File(path)
             if (file.exists()) {
@@ -69,7 +197,7 @@ object DownLoadManager {
      * 暂停下载
      * @param key String 暂停的标识
      */
-    fun pause(key: String) {
+    private fun pause(key: String) {
         val listener = DownLoadPool.getListenerFromKey(key)
         listener?.onDownLoadPause(key)
         DownLoadPool.pause(key)
@@ -96,7 +224,7 @@ object DownLoadManager {
     /**
      *下载
      * @param tag String 标识
-     * @param url String  下载的url
+     * @param url String 下载的url
      * @param savePath String 保存的路径
      * @param saveName String 保存的名字
      * @param reDownload Boolean 如果文件已存在是否需要重新下载 默认不需要重新下载
@@ -119,10 +247,11 @@ object DownLoadManager {
             return
         } else if (scope != null && !scope.isActive) {
             "key $tag 已经在队列中 但是已经不再活跃 remove".logi()
-            DownLoadPool.removeExitSp(tag)
+            DownLoadPool.removeExitScope(tag)
         }
 
         if (saveName.isEmpty()) {
+            //传入的文件名为空串
             withContext(Dispatchers.Main) {
                 loadListener.onDownLoadError(tag, Throwable("save name is Empty"))
             }
@@ -130,6 +259,7 @@ object DownLoadManager {
         }
 
         if (Looper.getMainLooper().thread == Thread.currentThread()) {
+            //判断当前线程是否为主线程
             withContext(Dispatchers.Main) {
                 loadListener.onDownLoadError(tag, Throwable("current thread is in main thread"))
             }
@@ -138,12 +268,14 @@ object DownLoadManager {
 
         val file = File("$savePath/$saveName")
         val currentLength = if (!file.exists()) {
+            //文件不存在，则从头开始下载
             0L
         } else {
+            //文件存在，则读取已下载的长度
             ShareDownLoadUtil.getLong(tag, 0)
         }
         if (file.exists()&&currentLength == 0L && !reDownload) {
-            //文件已存在了
+            //文件已存在了，且上一次已经下载完，且没有设置重新下载
             loadListener.onDownLoadSuccess(tag, file.path, file.length())
             return
         }
@@ -156,10 +288,10 @@ object DownLoadManager {
             DownLoadPool.add(tag, loadListener)
 
             withContext(Dispatchers.Main) {
+                //准备开始下载
                 loadListener.onDownLoadPrepare(key = tag)
             }
-            val response = retrofitBuilder.create(DownLoadService::class.java)
-                .downloadFile("bytes=$currentLength-", url)
+            val response = api.downloadFile("bytes=$currentLength-", url)
             val responseBody = response.body()
             if (responseBody == null) {
                 "responseBody is null".logi()

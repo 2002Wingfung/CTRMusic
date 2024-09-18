@@ -1,4 +1,4 @@
-package me.hgj.jetpackmvvm.ext.download
+package com.example.jetpackmvvm.ext.download
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -7,14 +7,14 @@ import java.util.concurrent.ConcurrentHashMap
 
 
 /**
- * @author : hgj
- * @date   : 2020/7/13
+ * @author : Hong Yongfeng
+ * @date   : 2024/9/13
  */
-
 object DownLoadPool {
 
-
     private val scopeMap: ConcurrentHashMap<String, CoroutineScope> = ConcurrentHashMap()
+
+    private val currentSet=HashSet<String>()
 
     //下载位置
     private val pathMap: ConcurrentHashMap<String, String> = ConcurrentHashMap()
@@ -36,6 +36,11 @@ object DownLoadPool {
         pathMap[key] = path
     }
 
+    //添加当前多线程tag
+    fun add(key: String){
+        currentSet.add(key)
+    }
+
 
     fun remove(key: String) {
         pause(key)
@@ -43,6 +48,7 @@ object DownLoadPool {
         listenerHashMap.remove(key)
         pathMap.remove(key)
         ShareDownLoadUtil.remove(key)
+        currentSet.remove(key)
     }
 
 
@@ -53,7 +59,11 @@ object DownLoadPool {
         }
     }
 
-    fun removeExitSp(key: String) {
+    fun removeSetFromKey(key: String){
+        currentSet.remove(key)
+    }
+
+    fun removeExitScope(key: String) {
         scopeMap.remove(key)
     }
 
@@ -73,5 +83,6 @@ object DownLoadPool {
     fun getListenerMap(): ConcurrentHashMap<String, OnDownLoadListener> {
         return listenerHashMap
     }
+    fun getCurrentSet()= currentSet
 
 }

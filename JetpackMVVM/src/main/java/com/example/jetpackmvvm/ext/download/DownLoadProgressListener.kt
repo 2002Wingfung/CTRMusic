@@ -1,11 +1,12 @@
-package me.hgj.jetpackmvvm.ext.download
+package com.example.jetpackmvvm.ext.download
 
 /**
- * @author : hgj
- * @date   : 2020/7/13
+ * @author : Hong Yongfeng
+ * @date   : 2024/9/13
  */
-
 interface DownLoadProgressListener {
+
+
 
     /**
      * 下载进度
@@ -15,7 +16,9 @@ interface DownLoadProgressListener {
      * @param count 总共长度
      * @param done  是否完成
      */
-    fun onUpdate( key: String,progress: Int, read: Long,count: Long,done: Boolean)
+    fun onUpdate(key: String,progress: Int, read: Long,count: Long,done: Boolean)
+
+    fun onMultiUpdate(index:Int, key: String, progress: Int,hadRead: Long,count: Long,indexCount: Int)
 }
 
 
@@ -30,6 +33,13 @@ interface OnDownLoadListener : DownLoadProgressListener {
     //下载成功
     fun onDownLoadSuccess(key: String, path: String,size:Long)
 
+    //多线程下载成功
+    fun onMultiDownLoadSuccess(key: String,path: String,size: Long,index: Int,indexCount:Int)
+
     //下载暂停
     fun onDownLoadPause(key: String)
+}
+
+interface ContentLengthListener{
+    fun updateContentLength(length: Long)
 }

@@ -1,19 +1,22 @@
-package me.hgj.jetpackmvvm.ext.download
+package com.example.jetpackmvvm.ext.download
 
+import com.example.jetpackmvvm.base.appContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import com.example.jetpackmvvm.base.appContext
 import okhttp3.ResponseBody
 import java.io.File
+import java.io.IOException
 import java.io.RandomAccessFile
+import java.net.URL
 import java.nio.channels.FileChannel
 import java.text.DecimalFormat
+import java.util.concurrent.ThreadPoolExecutor
+
 
 /**
- * @author : hgj
- * @date   : 2020/7/13
+ * @author : Hong Yongfeng
+ * @date   : 2024/9/13
  */
-
 object FileTool {
 
     //定义GB的计算常量
@@ -62,66 +65,66 @@ object FileTool {
     }
 
     /**
-     *
      * @param currentLength Long
      * @param responseBody ResponseBody
      * @param filePath String
      * @param key String
      * @param loadListener OnDownLoadListener
      */
-    suspend fun saveToFile(
+    private suspend fun saveToFile(
         currentLength: Long,
         responseBody: ResponseBody,
         filePath: String,
         key: String,
         loadListener: OnDownLoadListener
     ) {
-        val fileLength =
-            getFileLength(currentLength, responseBody)
-        val inputStream = responseBody.byteStream()
-        val accessFile = RandomAccessFile(File(filePath), "rwd")
-        val channel = accessFile.channel
-        val mappedBuffer = channel.map(
-            FileChannel.MapMode.READ_WRITE,
-            currentLength,
-            fileLength - currentLength
-        )
-        val buffer = ByteArray(1024 * 4)
-        var len = 0
-        var lastProgress = 0
-        var currentSaveLength = currentLength //当前的长度
+        withContext(Dispatchers.IO){
+            val fileLength = getFileLength(currentLength, responseBody)
+            val inputStream = responseBody.byteStream()
+            val accessFile = RandomAccessFile(File(filePath), "rw")
+            val channel = accessFile.channel
+            val mappedBuffer = channel.map(
+                FileChannel.MapMode.READ_WRITE,
+                currentLength,
+                fileLength - currentLength
+            )
+            val buffer = ByteArray(1024 * 4)
+            var len = 0
+            var lastProgress = 0
+            var currentSaveLength = currentLength //当前的长度
 
-        while (inputStream.read(buffer).also { len = it } != -1) {
-            mappedBuffer.put(buffer, 0, len)
-            currentSaveLength += len
+            while (inputStream.read(buffer).also { len = it } != -1) {
+                mappedBuffer.put(buffer, 0, len)
+                currentSaveLength += len
 
-            val progress = (currentSaveLength.toFloat() / fileLength * 100).toInt() // 计算百分比
-            if (lastProgress != progress) {
-                lastProgress = progress
-                //记录已经下载的长度
-                ShareDownLoadUtil.putLong(key, currentSaveLength)
-                withContext(Dispatchers.Main) {
-                    loadListener.onUpdate(
-                        key,
-                        progress,
-                        currentSaveLength,
-                        fileLength,
-                        currentSaveLength == fileLength
-                    )
-                }
-
-                if (currentSaveLength == fileLength) {
+                val progress = (currentSaveLength.toFloat() / fileLength * 100).toInt() // 计算百分比
+                if (lastProgress != progress) {
+                    lastProgress = progress
+                    //记录已经下载的长度
+                    ShareDownLoadUtil.putLong(key, currentSaveLength)
                     withContext(Dispatchers.Main) {
-                        loadListener.onDownLoadSuccess(key, filePath,fileLength)
+                        loadListener.onUpdate(
+                            key,
+                            progress,
+                            currentSaveLength,
+                            fileLength,
+                            currentSaveLength == fileLength
+                        )
                     }
-                    DownLoadPool.remove(key)
+
+                    if (currentSaveLength == fileLength) {
+                        withContext(Dispatchers.Main) {
+                            loadListener.onDownLoadSuccess(key, filePath,fileLength)
+                        }
+                        DownLoadPool.remove(key)
+                    }
                 }
             }
-        }
 
-        inputStream.close()
-        accessFile.close()
-        channel.close()
+            inputStream.close()
+            accessFile.close()
+            channel.close()
+        }
     }
 
     /**
@@ -130,7 +133,7 @@ object FileTool {
      * @param responseBody ResponseBody
      * @return Long
      */
-    fun getFileLength(
+    private fun getFileLength(
         currentLength: Long,
         responseBody: ResponseBody
     ) =
@@ -148,8 +151,15 @@ object FileTool {
             return null
         }
         return "$savePath/$saveName"
-
     }
+
+    /**
+     * 根据传入url获取最后一个 / 后的文件名
+     * @param url
+     * @return 返回文件名
+     */
+    fun getFileNameFromUrl(url: String) =
+        url.substring(url.lastIndexOf("/") + 1)
 
 
     /**
@@ -157,12 +167,38 @@ object FileTool {
      * @param downLoadPath String
      * @return Boolean
      */
-    fun createFile(downLoadPath: String): Boolean {
+    private fun createFile(downLoadPath: String): Boolean {
         val file = File(downLoadPath)
         if (!file.exists()) {
             return file.mkdirs()
         }
         return true
+    }
+
+
+
+    /**
+     * 为目标文件分配空间
+     *
+     * @param targetFile
+     * 目标文件
+     * @param sourceSize
+     * 源文件大小
+     */
+    fun openSpace(targetFile: File, sourceSize: Long) {
+        var randomAccessFile: RandomAccessFile? = null
+        try {
+            randomAccessFile = RandomAccessFile(targetFile, "rw")
+            randomAccessFile.setLength(sourceSize)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                randomAccessFile?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
     }
 
 

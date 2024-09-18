@@ -74,8 +74,8 @@ class HomeFragment : BaseVmDbFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun lazyLoadData() {
 
         //請求轮播图
-        mViewModel.requestBannerList()
-        mViewModel.requestPlayListData()
+//        mViewModel.requestBannerList()
+//        mViewModel.requestPlayListData()
     }
 
     override fun createObserver() {
