@@ -69,7 +69,7 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
             indexCount: Int
         ) {
             progressArray[index] = progress
-            if (System.currentTimeMillis()-lastUpdateTime>1000){
+            //if (System.currentTimeMillis()-lastUpdateTime>300){
                 lastUpdateTime=System.currentTimeMillis()
                 //不需要锁，不需要做到绝对精确
                 var sum=0
@@ -77,7 +77,7 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
                     sum+=progressArray[i]
                 }
                 downloadResultState.postValue(DownloadResultState.onProgress(hadRead, count, sum/indexCount))
-            }
+            //}
         }
     }
 }

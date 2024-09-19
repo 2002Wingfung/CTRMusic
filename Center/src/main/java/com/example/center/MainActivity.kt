@@ -174,7 +174,7 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), Di
 //            )
 //        }
         DownLoadManager.multiDownLoad(
-            1,
+            3,
             "tag5",
             url,
             "/storage/emulated/0/Pictures/CTRMusic",

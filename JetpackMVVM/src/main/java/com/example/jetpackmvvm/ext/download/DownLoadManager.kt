@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File
 import java.net.URL
+import java.util.concurrent.Executors
 import java.util.concurrent.SynchronousQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -30,9 +31,9 @@ object DownLoadManager {
             .baseUrl("https://www.baidu.com")
             .client(
                 OkHttpClient.Builder()
-                    .connectTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS).build()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS).build()
             ).build()
     }
     val api: DownLoadService by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
@@ -68,7 +69,7 @@ object DownLoadManager {
         }
         //在主线程初始化县城出，不需要线程同步
         val threadPool = ThreadPool(
-            corePoolSize = 2,
+            corePoolSize = 5,
             maximumPoolSize = 64,
             keepAliveTime = 60L,
             workQueue = blockingQueue
@@ -141,10 +142,11 @@ object DownLoadManager {
                 // 分线程下载文件
                 val avgSize = sourceSize / threadNum + 1
                 for (i in 0 until threadNum) {
-                    println((avgSize * i).toString() + "------" + (avgSize * (i + 1)))
+                    val end=(avgSize * (i + 1)).coerceAtMost(sourceSize-1)
+                    println((avgSize * i).toString() + "------" + end)
                     pool.execute(
                         MultiDownloadTask(
-                            avgSize * i, avgSize * (i + 1),
+                            avgSize * i, end,
                             file, sourceURL,listener,tag,i,threadNum
                         )
                     )

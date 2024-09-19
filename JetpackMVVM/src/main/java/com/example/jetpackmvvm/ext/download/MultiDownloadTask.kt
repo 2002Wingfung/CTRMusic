@@ -10,6 +10,7 @@ import java.io.File
 import java.io.IOException
 import java.io.RandomAccessFile
 import java.net.URL
+import java.nio.channels.FileChannel
 
 
 /**
@@ -38,8 +39,6 @@ class MultiDownloadTask(
         var bufferedInputStream: BufferedInputStream? = null
         var randomAccessFile: RandomAccessFile? = null
         try {
-//            val url = URL(loadUrl)
-//            val conn = url.openConnection()
             val responseBody = DownLoadManager.api.multiDownloadFile("bytes=$start-$end", loadUrl).execute().body()
             if (responseBody == null) {
                 "responseBody is null".logi()
@@ -54,7 +53,7 @@ class MultiDownloadTask(
             randomAccessFile = RandomAccessFile(file, "rw")
 
             // 源文件和目标文件的指针指向同一个位置
-            bufferedInputStream.skip(start)
+            //bufferedInputStream.skip(start)
             randomAccessFile.seek(start)
 
             val sourceLen = end - start
@@ -63,6 +62,8 @@ class MultiDownloadTask(
             var lastProgress = 0
             // 如果比默认长度小，就没必要按照默认长度读取文件了
             val bs = ByteArray((if (2048 < sourceLen) 2048 else sourceLen).toInt())
+//            logE("thread",Thread.currentThread().name+"start$start end $end")
+//            logE("pointer",randomAccessFile.filePointer.toString())
 
             while ((bufferedInputStream.read(bs).also { readLen = it.toLong() }).toLong() != -1L) {
                 start += readLen
@@ -80,12 +81,62 @@ class MultiDownloadTask(
                         readLen,
                         indexCount
                     )
-
+//                    logE(Thread.currentThread().name, "start$start end$end")
                     if (start >= end-1) {
                         listener.onMultiDownLoadSuccess(tag, file.path, readLen,index,indexCount)
                     }
+
                 }
             }
+
+
+
+//            val inputStream = responseBody.byteStream()
+//
+//            val sourceLength=end - start
+//            val accessFile = RandomAccessFile(file, "rw")
+//            val channel = accessFile.channel
+//            val mappedBuffer = channel.map(
+//                FileChannel.MapMode.READ_WRITE,
+//                start,
+//                sourceLength
+//            )
+//            val buffer = ByteArray(1024 * 4)
+//            var len = 0
+//            var lastProgress = 0
+//            var currentSaveLength = start //当前的长度
+//
+//            while (inputStream.read(buffer).also { len = it } != -1) {
+//                mappedBuffer.put(buffer, 0, len)
+//                currentSaveLength += len
+//                logE("pointer",accessFile.filePointer.toString())
+//                val progress = (currentSaveLength.toFloat() / sourceLength * 100).toInt() // 计算百分比
+//                if (lastProgress != progress) {
+//                    lastProgress = progress
+//                    //记录已经下载的长度
+////                    ShareDownLoadUtil.putLong(key, currentSaveLength)
+////                    withContext(Dispatchers.Main) {
+////                        loadListener.onUpdate(
+////                            key,
+////                            progress,
+////                            currentSaveLength,
+////                            fileLength,
+////                            currentSaveLength == fileLength
+////                        )
+////                    }
+//
+////                    if (currentSaveLength == fileLength) {
+////                        withContext(Dispatchers.Main) {
+////                            loadListener.onDownLoadSuccess(key, filePath,fileLength)
+////                        }
+////                        DownLoadPool.remove(key)
+////                    }
+//                }
+//            }
+//
+//            inputStream.close()
+//            accessFile.close()
+//            channel.close()
         } catch (e: Exception) {
             listener.onDownLoadError(tag,e)
             e.printStackTrace()
