@@ -88,55 +88,6 @@ class MultiDownloadTask(
 
                 }
             }
-
-
-
-//            val inputStream = responseBody.byteStream()
-//
-//            val sourceLength=end - start
-//            val accessFile = RandomAccessFile(file, "rw")
-//            val channel = accessFile.channel
-//            val mappedBuffer = channel.map(
-//                FileChannel.MapMode.READ_WRITE,
-//                start,
-//                sourceLength
-//            )
-//            val buffer = ByteArray(1024 * 4)
-//            var len = 0
-//            var lastProgress = 0
-//            var currentSaveLength = start //当前的长度
-//
-//            while (inputStream.read(buffer).also { len = it } != -1) {
-//                mappedBuffer.put(buffer, 0, len)
-//                currentSaveLength += len
-//                logE("pointer",accessFile.filePointer.toString())
-//                val progress = (currentSaveLength.toFloat() / sourceLength * 100).toInt() // 计算百分比
-//                if (lastProgress != progress) {
-//                    lastProgress = progress
-//                    //记录已经下载的长度
-////                    ShareDownLoadUtil.putLong(key, currentSaveLength)
-////                    withContext(Dispatchers.Main) {
-////                        loadListener.onUpdate(
-////                            key,
-////                            progress,
-////                            currentSaveLength,
-////                            fileLength,
-////                            currentSaveLength == fileLength
-////                        )
-////                    }
-//
-////                    if (currentSaveLength == fileLength) {
-////                        withContext(Dispatchers.Main) {
-////                            loadListener.onDownLoadSuccess(key, filePath,fileLength)
-////                        }
-////                        DownLoadPool.remove(key)
-////                    }
-//                }
-//            }
-//
-//            inputStream.close()
-//            accessFile.close()
-//            channel.close()
         } catch (e: Exception) {
             listener.onDownLoadError(tag,e)
             e.printStackTrace()

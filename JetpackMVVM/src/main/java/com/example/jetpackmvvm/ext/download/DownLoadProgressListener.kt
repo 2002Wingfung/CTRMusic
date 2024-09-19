@@ -6,8 +6,6 @@ package com.example.jetpackmvvm.ext.download
  */
 interface DownLoadProgressListener {
 
-
-
     /**
      * 下载进度
      * @param key url
