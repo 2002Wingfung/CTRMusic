@@ -62,10 +62,8 @@ class MultiDownloadTask(
             var lastProgress = 0
             // 如果比默认长度小，就没必要按照默认长度读取文件了
             val bs = ByteArray((if (2048 < sourceLen) 2048 else sourceLen).toInt())
-//            logE("thread",Thread.currentThread().name+"start$start end $end")
-//            logE("pointer",randomAccessFile.filePointer.toString())
 
-            while ((bufferedInputStream.read(bs).also { readLen = it.toLong() }).toLong() != -1L) {
+            while (start<end && (bufferedInputStream.read(bs).also { readLen = it.toLong() }).toLong() != -1L) {
                 start += readLen
                 randomAccessFile.write(bs, 0, readLen.toInt())
                 val progress = ((start-startIndex).toFloat() / sourceLen * 100).toInt() // 计算百分比
@@ -81,11 +79,9 @@ class MultiDownloadTask(
                         readLen,
                         indexCount
                     )
-//                    logE(Thread.currentThread().name, "start$start end$end")
                     if (start >= end-1) {
                         listener.onMultiDownLoadSuccess(tag, file.path, readLen,index,indexCount)
                     }
-
                 }
             }
         } catch (e: Exception) {

@@ -31,9 +31,9 @@ object DownLoadManager {
             .baseUrl("https://www.baidu.com")
             .client(
                 OkHttpClient.Builder()
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS).build()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS).build()
             ).build()
     }
     val api: DownLoadService by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {

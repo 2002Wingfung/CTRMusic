@@ -158,8 +158,9 @@ class MainActivity : BaseVmDbActivity<BaseViewModel, ActivityMain2Binding>(), Di
 //        )
 
         val liveData=MutableLiveData<DownloadResultState>()
-        val url="https://upload.jianshu.io/users/upload_avatars/7687616/3ee6aef2-efc1-47a5-a868-0d1824d2a119.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp"
-//        val url="https://nsub2t3.118pan.com/dl.php?ZjY4M3paVi9XdWl1SHl6T1NBZzY4TDQyYnd5c0h5YmhCbUt3TDB2VjFlWFcvcTM4Q3VJVTNyZ2d3TzhONTE4bEVWTFM3TGlzRTFkR0JQK0RXNGNPc3lORk1IZE5nNVpHK203N3dsREFPck5xLy9vc1FuTG9WbGZNT1Z5ay9ORTFtL2xINjZqVkVZTVlURnJ5SVk4TUk4a201REtRZU12OFFZTGtVT0M5bGU3MmNzbmkyTWhMQjlORThjcEFQSXFseVZ0QlpvaFVRYjA2djNXSWdjck9jcVU0bFpEeTRKZWdZdUJML1U4OFFUbkhUUzNQcGVBUCtaMzZWVjZRdW9hNDduYU5JMGhOZlRwaFNDY2ZSSk9wai9RRkN1UVZUR1M0a1NOM3UyU09MZ3NXZnVpV0ZQOA%3D%3D"
+//        val url="https://upload.jianshu.io/users/upload_avatars/7687616/3ee6aef2-efc1-47a5-a868-0d1824d2a119.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/80/h/80/format/webp"
+
+        val url="https://nsub2t3.118pan.com/dl.php?NzU3ZTRlVWRHRVUrVUpJL0RqOFZTbGd2WkxVZUpTbURJS25NWUxHYkh6WTI5ZjZQTENsMGdsY2RZanJHNllZWFU2T2VpSDFmNjJldlJCSWszb1dCUmh5RmlFNFh2NC83aVRKOW9PcU8rT0Z5dkZDS2xUcHdYQ2c1L0ZPVG02OWhNQ28rSU1HN203emRZY2djN1g0SnBUS201Q1JLcVFMeUdQRVBJb0VKQ1ZvRUQ5NEZxT3hzVGJZNjVOcCt2ZkRCVE1MUEtsRlgzK0U1eitOK0x6WjZHSklPVDBnZ0s0NFMyZDFTdmFVT1FMUjhQWmFHN29pS3huKzkya3JDMW11azdJcTgza2hHN0hCUXRxaWxOdk5URGdIZWVBTWMrbVhkYmx5dExiWVpiZkRRUFRKVHlhbw%3D%3D"
 //        lifecycleScope.launch(Dispatchers.IO) {
 //            val connection = URL(url).openConnection()
 //            val sourceSize = connection.contentLengthLong
