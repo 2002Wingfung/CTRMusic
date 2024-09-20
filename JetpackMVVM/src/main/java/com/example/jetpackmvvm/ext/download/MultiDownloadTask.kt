@@ -80,7 +80,7 @@ class MultiDownloadTask(
                         indexCount
                     )
                     if (start >= end-1) {
-                        listener.onMultiDownLoadSuccess(tag, file.path, readLen,index,indexCount)
+                        listener.onMultiDownLoadSuccess(tag, file.path, start,index,indexCount)
                     }
                 }
             }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File
+import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.SynchronousQueue
@@ -67,7 +68,7 @@ object DownLoadManager {
             loadListener.onDownLoadError(tag, Throwable("current thread is not in main thread"))
             return
         }
-        //在主线程初始化县城出，不需要线程同步
+        //在主线程初始化线程池，不需要线程同步
         val threadPool = ThreadPool(
             corePoolSize = 5,
             maximumPoolSize = 64,
@@ -79,6 +80,8 @@ object DownLoadManager {
         threadPool.execute{
             runCatching {
                 val connection = URL(url).openConnection()
+//                connection as HttpURLConnection
+//                connection.disconnect()
                 connection.contentLengthLong
             }.onSuccess {
                 val file = File("$savePath/$saveName")
@@ -127,30 +130,41 @@ object DownLoadManager {
         continueDownload: Boolean = false
     ) {
         try {
+            val filePath = getFilePath(savePath, saveName)
+            if (filePath == null) {
+                listener.onDownLoadError(tag, Throwable("mkdirs file [$savePath]  error"))
+                DownLoadPool.remove(tag)
+                return
+            }
+            val file = File(filePath)
             if (continueDownload){
                 //断点续传+多线程下载
             }else{
-                val filePath = getFilePath(savePath, saveName)
-                if (filePath == null) {
-                    listener.onDownLoadError(tag, Throwable("mkdirs file [$savePath]  error"))
-                    DownLoadPool.remove(tag)
-                    return
-                }
-                val file = File(filePath)
-                // 为目标文件分配空间
+                // 为目标文件分配空间，只需要在第一次下载时分配空间
                 openSpace(file, sourceSize)
                 // 分线程下载文件
-                val avgSize = sourceSize / threadNum + 1
-                for (i in 0 until threadNum) {
-                    val end=(avgSize * (i + 1)).coerceAtMost(sourceSize-1)
-                    println((avgSize * i).toString() + "------" + end)
-                    pool.execute(
-                        MultiDownloadTask(
-                            avgSize * i, end,
-                            file, sourceURL,listener,tag,i,threadNum
-                        )
+//                val avgSize = sourceSize / threadNum + 1
+//                for (i in 0 until threadNum) {
+//                    val end=(avgSize * (i + 1)).coerceAtMost(sourceSize-1)
+//                    println((avgSize * i).toString() + "------" + end)
+//                    pool.execute(
+//                        MultiDownloadTask(
+//                            avgSize * i, end,
+//                            file, sourceURL,listener,tag,i,threadNum
+//                        )
+//                    )
+//                }
+            }
+            val avgSize = (sourceSize-currentLength) / threadNum + 1
+            for (i in 0 until threadNum) {
+                val end = (avgSize * (i + 1) + currentLength).coerceAtMost(sourceSize-1)
+                println((avgSize * i  + currentLength).toString() + "------" + end)
+                pool.execute(
+                    MultiDownloadTask(
+                        avgSize * i + currentLength, end,
+                        file, sourceURL,listener,tag,i,threadNum
                     )
-                }
+                )
             }
         } catch (e: Exception) {
             listener.onDownLoadError(tag,e)

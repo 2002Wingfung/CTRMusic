@@ -32,7 +32,7 @@ interface OnDownLoadListener : DownLoadProgressListener {
     fun onDownLoadSuccess(key: String, path: String,size:Long)
 
     //多线程下载成功
-    fun onMultiDownLoadSuccess(key: String,path: String,size: Long,index: Int,indexCount:Int)
+    fun onMultiDownLoadSuccess(key: String,path: String, currentLength: Long,index: Int,indexCount:Int)
 
     //下载暂停
     fun onDownLoadPause(key: String)

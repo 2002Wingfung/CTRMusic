@@ -10,10 +10,16 @@ import java.util.concurrent.ConcurrentHashMap
  */
 fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDownLoadListener {
     return object : OnDownLoadListener {
+
         private val multiArray by lazy { BooleanArray(64) }
-        private val progressArray by lazy{ IntArray(64) }
+        private val currentLengthArray by lazy { LongArray(64) }
+
+        private val progressArray by lazy { IntArray(64) }
         @Volatile
         private var lastUpdateTime=System.currentTimeMillis()
+        @Volatile
+        private var maxCoiledLength = 0L
+
         override fun onDownLoadPrepare(key: String) {
             //开始下载
             downloadResultState.postValue(DownloadResultState.onPending())
@@ -30,15 +36,18 @@ fun downLoadExt(downloadResultState: MutableLiveData<DownloadResultState>): OnDo
             downloadResultState.postValue(DownloadResultState.onSuccess(path, size))
         }
 
-        override fun onMultiDownLoadSuccess(key: String, path: String, size: Long, index: Int,indexCount:Int) {
+        override fun onMultiDownLoadSuccess(key: String, path: String, currentLength: Long, index: Int,indexCount:Int) {
             multiArray[index]=true
+            currentLengthArray[index]=currentLength
             for (i in 0 until indexCount){
                 if (!multiArray[i]){
                     return
+                }else {
+                    ShareDownLoadUtil.putLong(key,currentLengthArray[i])
                 }
             }
             //所有线程执行完毕
-            downloadResultState.postValue(DownloadResultState.onSuccess(path, size))
+            downloadResultState.postValue(DownloadResultState.onSuccess(path, currentLength))
             DownLoadPool.remove(key)
             for (i in 0 until indexCount){
                 multiArray[i]=false
